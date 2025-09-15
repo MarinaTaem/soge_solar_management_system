@@ -7,6 +7,7 @@ import 'package:solar_management_system/inverter/history_inverters/monthly_histo
 import 'package:solar_management_system/inverter/history_inverters/yearly_history_inverters.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/widgets/custom_tap_bar.dart';
+import 'package:solar_management_system/widgets/history_inverter_modal_botom.dart';
 
 class InvertersHistoryScreen extends StatefulWidget {
   const InvertersHistoryScreen({super.key});
@@ -44,8 +45,16 @@ class _InvertersHistoryScreenState extends State<InvertersHistoryScreen> {
                   icon: SvgPicture.asset('assets/images/chose_calendar.svg')),
               IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ExcelPreview()));
+                    showModalBottomSheet(
+                        context: context,
+                        backgroundColor: AppColor.background,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10))),
+                        builder: (BuildContext contect) {
+                          return HistoryInverterModalBotom();
+                        });
                   },
                   icon: SvgPicture.asset('assets/images/export.svg')),
             ],

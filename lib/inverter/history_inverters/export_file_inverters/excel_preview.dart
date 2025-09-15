@@ -31,10 +31,10 @@ class ExcelPreview extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Excel-like Preview"),
+        title: const Text("Excel Preview"),
         backgroundColor: AppColor.background,
       ),
-      backgroundColor: AppColor.background,
+      backgroundColor: AppColor.textPrimary,
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: SizedBox(

@@ -10,35 +10,16 @@ class PdfPreviewScreen extends StatelessWidget {
   Future<Uint8List> _generatePdf(PdfPageFormat format) async {
     final pdf = pw.Document();
 
-    // --- Layout constants: tweak these to fine tune spacing/alignment ---
-    final double col0 = 28; // "No." column
-    final double col1 = 112; // "Date/time" column
-    final double subColW =
-        44; // width for each sub-column inside groups (kW/A/V/Hz)
-    final double pvWidth = subColW * 3; // PV group (kW, A, V)
-    final double gridWidth = subColW * 2; // Grid group (A, V)
-    final double outputWidth = subColW * 4; // Output group (kWh, A, V, Hz)
+    final double col0 = 28;
+    final double col1 = 112;
+    final double subColW = 44;
+    final double pvWidth = subColW * 3;
+    final double gridWidth = subColW * 2;
+    final double outputWidth = subColW * 4;
 
     final headerStyle =
         pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold);
     final smallStyle = pw.TextStyle(fontSize: 8);
-
-    // helper to build a group row (units or data) with N items
-    // pw.Widget groupRow(List<String> items, {bool rightAlign = false}) {
-    //   return pw.Row(
-    //     children: items.map((txt) {
-    //       return pw.Container(
-    //         width: subColW,
-    //         padding: const pw.EdgeInsets.symmetric(vertical: 6),
-    //         child: pw.Align(
-    //           alignment:
-    //               rightAlign ? pw.Alignment.centerRight : pw.Alignment.center,
-    //           child: pw.Text(txt, style: smallStyle),
-    //         ),
-    //       );
-    //     }).toList(),
-    //   );
-    // }
 
     // sample data
     final rows = List.generate(7, (i) {
@@ -169,7 +150,7 @@ class PdfPreviewScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // PV sub-units (kW A V)
+                    // PV sub (kW A V)
                     pw.Container(
                       padding: const pw.EdgeInsets.symmetric(vertical: 2),
                       decoration: const pw.BoxDecoration(
@@ -193,7 +174,7 @@ class PdfPreviewScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // Grid sub-units (A V)
+                    // Grid sub (A V)
                     pw.Container(
                       padding: const pw.EdgeInsets.symmetric(vertical: 2),
                       decoration: const pw.BoxDecoration(
@@ -213,7 +194,7 @@ class PdfPreviewScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // Output sub-units (kWh A V Hz)
+                    // Output sub (kWh A V Hz)
                     pw.Container(
                       padding: const pw.EdgeInsets.symmetric(vertical: 2),
                       decoration: const pw.BoxDecoration(
@@ -317,7 +298,6 @@ class PdfPreviewScreen extends StatelessWidget {
 
             pw.SizedBox(height: 18),
 
-            // Thin long divider under the table but starting at the start of the PV group
             pw.Container(
               margin: pw.EdgeInsets.only(left: col0 + col1, right: 0),
               height: 1,
