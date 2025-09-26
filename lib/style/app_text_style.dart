@@ -17,4 +17,14 @@ class AppTextStyle {
     fontSize: 15,
     fontWeight: FontWeight.normal,
   );
+  static const TextStyle inActiveTitle = TextStyle(
+    color: AppColor.unfocus,
+    fontSize: 15,
+    fontWeight: FontWeight.normal,
+  );
+  static const TextStyle unfocusTitle = TextStyle(
+    color: AppColor.textSecondary,
+    fontSize: 15,
+    fontWeight: FontWeight.normal,
+  );
 }

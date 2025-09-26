@@ -22,6 +22,8 @@ dependencies:
   excel: ^4.0.6
   #path provider
   path_provider: ^2.1.5
+  #datetime format
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +35,6 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/fonts/NotoSansKhmer_Regular.ttf
+    - assets/fonts/KantumruyPro_Regular.ttf
+    - assets/fonts/Khmer_Regular.ttf

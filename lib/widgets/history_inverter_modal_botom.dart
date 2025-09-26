@@ -3,9 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/excel_preview.dart';
 import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/pdf_preview_screen.dart';
 import 'package:solar_management_system/style/app_colors.dart';
+import 'package:solar_management_system/utils/datetime_helper.dart';
 
 class HistoryInverterModalBotom extends StatefulWidget {
-  const HistoryInverterModalBotom({super.key});
+  DateTime date;
+  HistoryInverterModalBotom({super.key, required this.date});
 
   @override
   State<HistoryInverterModalBotom> createState() =>
@@ -14,7 +16,6 @@ class HistoryInverterModalBotom extends StatefulWidget {
 
 class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
   bool isTapPdfExport = false;
-
   bool isTapExcelExport = false;
 
   @override
@@ -35,16 +36,14 @@ class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
               child: Row(
                 children: [
                   SvgPicture.asset(
-                    'assets/images/setting.svg',
-                    colorFilter:
-                        ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+                    'assets/images/export.svg',
                     width: 30,
                     height: 30,
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'ការកំណត់អាំងវែកទ័រ',
-                    style: TextStyle(color: AppColor.primary),
+                    'កាលបរិច្ឆេទ ${DatetimeHelper.formatToday(widget.date)}',
+                    style: TextStyle(color: AppColor.primary, fontSize: 16),
                   )
                 ],
               ),
@@ -120,7 +119,7 @@ class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
             SizedBox(width: 5),
             Text(
               feature,
-              style: TextStyle(fontSize: 15, color: AppColor.textPrimary),
+              style: TextStyle(fontSize: 16, color: AppColor.textPrimary),
             ),
           ],
         ),

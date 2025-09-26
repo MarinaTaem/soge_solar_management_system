@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:solar_management_system/inverter/config_param_inverter_screen.dart';
+import 'package:solar_management_system/inverter/config_param/config_param_inverter_screen.dart';
 import 'package:solar_management_system/inverter/history_inverter/inverter_history_screen.dart';
 import 'package:solar_management_system/inverter/info_inverter_screen.dart';
 import 'package:solar_management_system/style/app_colors.dart';

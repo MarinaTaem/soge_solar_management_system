@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/inverter/history_inverters/dialy_history_inverters.dart';
-import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/excel_preview.dart';
-import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/pdf_preview_screen.dart';
 import 'package:solar_management_system/inverter/history_inverters/monthly_history_inverters.dart';
 import 'package:solar_management_system/inverter/history_inverters/yearly_history_inverters.dart';
 import 'package:solar_management_system/style/app_colors.dart';
@@ -17,6 +15,7 @@ class InvertersHistoryScreen extends StatefulWidget {
 }
 
 class _InvertersHistoryScreenState extends State<InvertersHistoryScreen> {
+  DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -53,7 +52,9 @@ class _InvertersHistoryScreenState extends State<InvertersHistoryScreen> {
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10))),
                         builder: (BuildContext contect) {
-                          return HistoryInverterModalBotom();
+                          return HistoryInverterModalBotom(
+                            date: date,
+                          );
                         });
                   },
                   icon: SvgPicture.asset('assets/images/export.svg')),
