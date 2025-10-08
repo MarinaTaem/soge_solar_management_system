@@ -18,53 +18,66 @@ class _InverterHistoryScreenState extends State<InverterHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: 0,
       length: 3,
-      child: Scaffold(
-          backgroundColor: AppColor.background,
-          appBar: AppBar(
-            backgroundColor: AppColor.background,
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoute.stationDetail);
-                },
-                icon: SvgPicture.asset(
-                  'assets/images/arrow_back.svg',
-                  colorFilter:
-                      ColorFilter.mode(AppColor.textSecondary, BlendMode.srcIn),
-                )),
-            title: Text(
-              'ប្រវត្តិអាំងវែកទ័រ',
-              style: TextStyle(color: AppColor.textPrimary, fontSize: 18),
-            ),
-            centerTitle: true,
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset('assets/images/chose_calendar.svg')),
-              IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset('assets/images/export.svg')),
-            ],
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(31),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  height: 31,
-                  decoration: BoxDecoration(
-                    color: AppColor.textPrimary,
-                    borderRadius: BorderRadius.circular(5),
+      child: Builder(
+        builder: (context) {
+          final TabController tabController = DefaultTabController.of(context);
+          tabController.addListener(() {
+            if (!tabController.indexIsChanging) {
+              debugPrint("Current Tab Index : ${tabController.index}");
+              // call setStat if UI update
+            }
+          });
+          return Scaffold(
+              backgroundColor: AppColor.background,
+              appBar: AppBar(
+                backgroundColor: AppColor.background,
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoute.stationDetail);
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/images/arrow_back.svg',
+                      colorFilter: ColorFilter.mode(
+                          AppColor.textSecondary, BlendMode.srcIn),
+                    )),
+                title: Text(
+                  'ប្រវត្តិអាំងវែកទ័រ',
+                  style: TextStyle(color: AppColor.textPrimary, fontSize: 18),
+                ),
+                centerTitle: true,
+                actions: [
+                  IconButton(
+                      onPressed: () {},
+                      icon:
+                          SvgPicture.asset('assets/images/chose_calendar.svg')),
+                  IconButton(
+                      onPressed: () {},
+                      icon: SvgPicture.asset('assets/images/export.svg')),
+                ],
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(31),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Container(
+                      height: 31,
+                      decoration: BoxDecoration(
+                        color: AppColor.textPrimary,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(child: CustomTapBar()),
+                    ),
                   ),
-                  child: Center(child: CustomTapBar()),
                 ),
               ),
-            ),
-          ),
-          body: TabBarView(children: [
-            DialyHistoryInverter(),
-            MonthlyHistoryInverter(),
-            YearlyHistoryInverter(),
-          ])),
+              body: TabBarView(controller: tabController, children: [
+                DialyHistoryInverter(),
+                MonthlyHistoryInverter(),
+                YearlyHistoryInverter(),
+              ]));
+        },
+      ),
     );
   }
 }

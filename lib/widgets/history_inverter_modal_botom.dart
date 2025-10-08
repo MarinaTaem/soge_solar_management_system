@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/excel_preview.dart';
-import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/pdf_preview_screen.dart';
+import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/export_file_dashboard.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/utils/datetime_helper.dart';
 
 class HistoryInverterModalBotom extends StatefulWidget {
   DateTime date;
-  HistoryInverterModalBotom({super.key, required this.date});
+  late double pv_v = 1.0;
+  late double pv_a = 2.0;
+  late double pv = 3.0;
+  late double grid_a = 4.0;
+  late double grid = 5.0;
+  late double output_v = 6.0;
+  late double output_a = 7.0;
+  late double output = 8.0;
+  late double output_hz = 9.0;
+  HistoryInverterModalBotom(
+      {super.key,
+      required this.date,
+      required this.pv_v,
+      required this.pv_a,
+      required this.pv,
+      required this.grid_a,
+      required this.grid,
+      required this.output_v,
+      required this.output_a,
+      required this.output,
+      required this.output_hz});
 
   @override
   State<HistoryInverterModalBotom> createState() =>
@@ -24,6 +44,7 @@ class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
       height: 370,
       child: Column(
         children: [
+          // date
           Container(
             height: 50,
             decoration: BoxDecoration(
@@ -54,23 +75,37 @@ class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
             child: Column(
               spacing: 10,
               children: [
-                // View history
+                // PDF export
                 _rowModalBottomSheet(
                   'ទាញយកជា PDF',
                   'assets/images/history.svg',
-                  isOnTap: isTapExcelExport,
+                  isOnTap: isTapPdfExport,
                   onPressed: () {
                     setState(() {
                       isTapPdfExport = !isTapPdfExport;
                     });
+                    Navigator.pop(context);
                     Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (context) => const PdfPreviewScreen(),
-                      ),
+                      MaterialPageRoute(
+                          builder: (context) => ExportFileDashboard(
+                                date: widget.date,
+                                // navigate: AppRoute.pdfInvertersHistory,
+                                pv_v: widget.pv_v,
+                                pv_a: widget.pv_a,
+                                pv: widget.pv,
+                                grid_a: widget.grid_a,
+                                grid: widget.grid,
+                                output_v: widget.output_v,
+                                output_a: widget.output_a,
+                                output: widget.output,
+                                output_hz: widget.output_hz,
+                              )
+                          // PdfPreviewScreen(),
+                          ),
                     );
                   },
                 ),
-                // Config param
+                // Excel export
                 _rowModalBottomSheet(
                   'ទាញយកជា Excel',
                   'assets/images/conf_param.svg',
@@ -79,8 +114,9 @@ class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
                     setState(() {
                       isTapExcelExport = !isTapExcelExport;
                     });
+                    Navigator.pop(context);
                     Navigator.of(context).push(
-                      MaterialPageRoute<void>(
+                      MaterialPageRoute(
                         builder: (context) => const ExcelPreview(),
                       ),
                     );

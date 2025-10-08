@@ -3,10 +3,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/inverter/config_param/config_param_inverter_screen.dart';
 import 'package:solar_management_system/inverter/history_inverter/inverter_history_screen.dart';
 import 'package:solar_management_system/inverter/info_inverter_screen.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
+import 'package:solar_management_system/widgets/toas_message_warning.dart';
 
 class InverterModalButtomSheet extends StatefulWidget {
-  const InverterModalButtomSheet({super.key});
+  final ParamInverter paramInverter;
+  final bool isIverterOpen;
+  const InverterModalButtomSheet(
+      {super.key, required this.paramInverter, required this.isIverterOpen});
 
   @override
   State<InverterModalButtomSheet> createState() =>
@@ -71,20 +76,22 @@ class _InverterModalButtomSheetState extends State<InverterModalButtomSheet> {
               ),
               // Config param
               _rowModalBottomSheet(
-                'កំណត់ប៉ារ៉ាមែត្រ',
-                'assets/images/conf_param.svg',
-                isOnTap: isTapParamFeature,
-                onPressed: () {
-                  setState(() {
-                    isTapParamFeature = !isTapParamFeature;
-                  });
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const ConfigParamInverterScreen(),
+                  'កំណត់ប៉ារ៉ាមែត្រ', 'assets/images/conf_param.svg',
+                  isOnTap: isTapParamFeature, onPressed: () {
+                setState(() {
+                  isTapParamFeature = !isTapParamFeature;
+                });
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  _createRoute(
+                    ConfigParamInverterScreen(
+                      paramInverter: widget.paramInverter,
+                      isInverterOpen: widget.isIverterOpen,
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              }),
               // Inverter info
               _rowModalBottomSheet(
                 'ព័ត៌មានអាំងវែកទ័រ',
@@ -140,4 +147,20 @@ class _InverterModalButtomSheetState extends State<InverterModalButtomSheet> {
       ),
     );
   }
+}
+
+Route<void> _createRoute(Widget child) {
+  return PageRouteBuilder(
+    transitionDuration: Duration(milliseconds: 600),
+    pageBuilder: (context, animation, secondaryAnimation) => child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.easeInOut;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(position: animation.drive(tween), child: child);
+    },
+  );
 }

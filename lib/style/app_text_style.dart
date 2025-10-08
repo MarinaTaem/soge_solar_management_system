@@ -2,6 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 
 class AppTextStyle {
+  static const TextStyle header = TextStyle(
+    color: AppColor.textPrimary,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
+  static const TextStyle bodyPrimary = TextStyle(
+    color: AppColor.textPrimary,
+    fontSize: 15,
+    fontWeight: FontWeight.normal,
+  );
+  static const TextStyle bodyPrimaryBlue = TextStyle(
+    color: AppColor.primary,
+    fontSize: 15,
+    fontWeight: FontWeight.normal,
+  );
   static const TextStyle body = TextStyle(
     color: AppColor.textPrimary,
     fontSize: 12,

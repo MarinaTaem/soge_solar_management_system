@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/widgets/card_inverter_screen.dart';
 
@@ -10,24 +11,58 @@ class InverterScreen extends StatefulWidget {
 }
 
 class _InverterScreenState extends State<InverterScreen> {
+  List<ParamInverter> paramInverter = [
+    ParamInverter(
+      name: '',
+      status: true,
+      output_frequency: 0,
+      preset_frequency: 39.1,
+      pv_voltage: 528.9,
+      output_voltage: 0,
+      output_current: 0,
+      output_power: 0,
+      pv_input_current: 0,
+      p0_00: P0_00.gType,
+      p0_01: P0_01.sensorless,
+      p0_02: P0_02.terminalCmd,
+      p0_08: 50,
+      p0_09: P0_09.motorForward,
+      p0_10: 50,
+      p1_01: 500,
+      p1_02: 400,
+      p1_03: 11,
+      p1_04: 50,
+      p1_05: 500,
+      pe00: PE_00.ved,
+      pe16: 500,
+      pe17: 490,
+      pe18: 60,
+      pe19: 50,
+      pe20: 0,
+      pe21: 0,
+      pe22: 10,
+      pe23: 20,
+      pe24: 60,
+      pe25: 11,
+      pe26: 50,
+      pe27: 60,
+    ),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.background,
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
+      body: Padding(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            spacing: 5,
-            children: [
-              CardInverterScreen(),
-              CardInverterScreen(),
-              CardInverterScreen(),
-            ],
-          ),
-        ),
-      ),
+          child: ListView.builder(
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: CardInverterScreen(
+                      paramInverter: paramInverter[0],
+                    ));
+              })),
     );
   }
 }

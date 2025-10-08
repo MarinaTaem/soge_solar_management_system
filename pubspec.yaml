@@ -24,6 +24,13 @@ dependencies:
   path_provider: ^2.1.5
   #datetime format
   intl: ^0.20.2
+  #loading
+  loader_overlay: ^5.0.0
+  #tooltip_message
+  el_tooltip: ^2.2.1
+  #top snack bar - warning message
+  top_snackbar_flutter: ^3.3.0
+  share_plus: ^12.0.0
 
 dev_dependencies:
   flutter_test:
@@ -33,8 +40,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  fonts:
+    - family: Khmer
+      fonts:
+        - asset: assets/fonts/KantumruyPro_Regular.ttf
+          weight: 800
+        # - asset: assets/fonts/Khmer_Regular.ttf
+        # - asset: assets/fonts/NotoSansKhmer_Regular.ttf
+
   assets:
     - assets/images/
-    - assets/fonts/NotoSansKhmer_Regular.ttf
-    - assets/fonts/KantumruyPro_Regular.ttf
-    - assets/fonts/Khmer_Regular.ttf

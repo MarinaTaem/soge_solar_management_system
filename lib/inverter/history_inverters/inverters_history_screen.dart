@@ -54,6 +54,15 @@ class _InvertersHistoryScreenState extends State<InvertersHistoryScreen> {
                         builder: (BuildContext contect) {
                           return HistoryInverterModalBotom(
                             date: date,
+                            pv_v: 1.0,
+                            pv_a: 2.0,
+                            pv: 3.0,
+                            grid_a: 4.0,
+                            grid: 5.0,
+                            output_v: 6.0,
+                            output_a: 7.0,
+                            output: 8.0,
+                            output_hz: 9.0,
                           );
                         });
                   },

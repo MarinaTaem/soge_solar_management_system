@@ -179,11 +179,11 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
                   width: 17,
                   child: isExtended
                       ? SvgPicture.asset(
-                          'assets/images/arrow_up.svg',
+                          'assets/images/arrow_down.svg',
                           fit: BoxFit.contain,
                         )
                       : SvgPicture.asset(
-                          'assets/images/arrow_down.svg',
+                          'assets/images/arrow_up.svg',
                           fit: BoxFit.contain,
                         ),
                 ),

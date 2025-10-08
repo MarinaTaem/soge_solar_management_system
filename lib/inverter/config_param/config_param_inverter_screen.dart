@@ -1,12 +1,23 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:solar_management_system/routes/app_route.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
+import 'package:solar_management_system/station_detail_screen.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/style/app_text_style.dart';
 import 'package:solar_management_system/widgets/card_config_param_inverter.dart';
+import 'package:solar_management_system/widgets/dialog_clearify_config_param.dart';
+import 'package:solar_management_system/widgets/snackbar_config_param.dart';
+import 'package:solar_management_system/widgets/toas_message_warning.dart';
+import 'package:solar_management_system/widgets/widget_dropdown.dart';
+import 'package:solar_management_system/widgets/widget_input.dart';
 
 class ConfigParamInverterScreen extends StatefulWidget {
-  const ConfigParamInverterScreen({super.key});
+  final ParamInverter paramInverter;
+  final bool isInverterOpen;
+  const ConfigParamInverterScreen(
+      {super.key, required this.paramInverter, required this.isInverterOpen});
 
   @override
   State<ConfigParamInverterScreen> createState() =>
@@ -19,12 +30,23 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
   late Animation<double> _expendable;
   late AnimationController _controller;
 
+  bool isSaveChange = false;
+
   @override
   void initState() {
     super.initState();
     _controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 400));
     _expendable = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+
+    // show top snackbar
+    if (widget.paramInverter.status == false) {
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted) {
+          messageWarning(context);
+        }
+      });
+    }
   }
 
   @override
@@ -52,7 +74,16 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoute.stationDetail);
+              if (isSaveChange == false) {
+                setState(() {
+                  clarifyDialog(context, status: widget.paramInverter.status);
+                });
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StationDetailScreen()));
+              }
             },
             icon: SvgPicture.asset(
               'assets/images/arrow_back.svg',
@@ -68,7 +99,9 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
               margin: EdgeInsets.all(5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColor.greenDark,
+                color: widget.paramInverter.status
+                    ? AppColor.greenDark
+                    : AppColor.error,
               ),
             ),
             Text(
@@ -80,11 +113,26 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
         centerTitle: true,
         actions: [
           TextButton(
-              onPressed: () {},
-              child: Text(
-                'រក្សាទុក',
-                style: TextStyle(fontSize: 15, color: AppColor.bluskyLight),
-              ))
+            onPressed: () async {
+              setState(() {
+                isSaveChange = true;
+              });
+              // Show loading
+              context.loaderOverlay.show();
+              await Future.delayed(const Duration(seconds: 2));
+              context.loaderOverlay.hide();
+              // Show snackbar
+              final snackBar =
+                  snackbar(context, isConnected: widget.paramInverter.status);
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              // back to station detail - inverter
+              Navigator.pop(context);
+            },
+            child: Text(
+              'រក្សាទុក',
+              style: TextStyle(fontSize: 15, color: AppColor.bluskyLight),
+            ),
+          ),
         ],
       ),
       backgroundColor: AppColor.background,
@@ -104,7 +152,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
+                    // Name param
                     Expanded(
                       flex: 3,
                       child: Column(
@@ -179,7 +227,8 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      '0',
+                                      widget.paramInverter.output_frequency
+                                          .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),
@@ -199,7 +248,8 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      '39.01',
+                                      widget.paramInverter.preset_frequency
+                                          .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),
@@ -220,7 +270,8 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      '528.9',
+                                      widget.paramInverter.pv_voltage
+                                          .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),
@@ -244,7 +295,8 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      '0',
+                                      widget.paramInverter.output_voltage
+                                          .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),
@@ -267,7 +319,8 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      '0',
+                                      widget.paramInverter.output_current
+                                          .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),
@@ -290,7 +343,8 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      '0',
+                                      widget.paramInverter.output_power
+                                          .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),
@@ -313,7 +367,8 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      '0',
+                                      widget.paramInverter.pv_input_current
+                                          .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),
@@ -383,13 +438,18 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                             Row(
                               children: [
                                 Expanded(
-                                    child: widgetDropdown(
-                                        "P",
-                                        {
-                                          "P": "1: P type",
-                                          "G": "1: G type",
+                                    child: WidgetDropdown(
+                                        value: widget.paramInverter.p0_00.value
+                                            .toString(),
+                                        options: {
+                                          "${P0_00.gType.value}":
+                                              "1: ${P0_00.gType.description}",
+                                          "${P0_00.pType.value}":
+                                              "2: ${P0_00.pType.description}",
                                         },
-                                        true)),
+                                        description: 'ការបង្ហាញម៉ូដែល GP',
+                                        range: '1: ម៉ូដែល G, 2: ម៉ូដែល P',
+                                        isEditable: true)),
                                 SizedBox(width: 5),
                                 SizedBox(width: 30, child: Text(''))
                               ],
@@ -398,16 +458,27 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                             Row(
                               children: [
                                 Expanded(
-                                    child: widgetDropdown(
-                                        "VF",
-                                        {
-                                          "VF": "0: VF control",
-                                          "1": "1:  controll",
-                                          "2": "2:  controll",
-                                          "3": "3:  controll",
-                                          "4": "4:  controll",
-                                        },
-                                        true)),
+                                    child: WidgetDropdown(
+                                  value: widget.paramInverter.p0_01.value
+                                      .toString(),
+                                  options: {
+                                    "${P0_01.vfControl.value}":
+                                        "0: ${P0_01.vfControl.description}",
+                                    "${P0_01.sensorless.value}":
+                                        "1: ${P0_01.sensorless.description}",
+                                    "${P0_01.sensor.value}":
+                                        "2: ${P0_01.sensor.description}",
+                                    "${P0_01.twoWires.value}":
+                                        "3: ${P0_01.twoWires.description}",
+                                    "${P0_01.threeWires.value}":
+                                        "4: ${P0_01.threeWires.description}",
+                                  },
+                                  description: 'ជ្រើរើសប្រភទម៉ូទ័រ',
+                                  range:
+                                      '0: VF, 1: Sensorless, 2: Sensor, 3: 2 wire output, 4: 3 wire output',
+                                  isEditable:
+                                      widget.isInverterOpen ? true : false,
+                                )),
                                 SizedBox(width: 5),
                                 SizedBox(width: 30, child: Text(''))
                               ],
@@ -416,15 +487,23 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                             Row(
                               children: [
                                 Expanded(
-                                    child: widgetDropdown(
-                                        "0",
-                                        {
-                                          "0": "0: ON/OFF using Keypad",
-                                          "1":
-                                              "1: ON/OFF using Terminal Comand",
-                                          "2": "2: ON/OFF using RS485",
-                                        },
-                                        true)),
+                                    child: WidgetDropdown(
+                                  value: widget.paramInverter.p0_02.value
+                                      .toString(),
+                                  options: {
+                                    "${P0_02.keypad.value}":
+                                        "0: ${P0_02.keypad.description}",
+                                    "${P0_02.terminalCmd.value}":
+                                        "1: ${P0_02.terminalCmd.description}",
+                                    "${P0_02.rs485.value}":
+                                        "2: ${P0_02.rs485.description}",
+                                  },
+                                  description:
+                                      'ជ្រើសរើសវិធីដើម្បីបើក/បិទអាំងវែកទ័រ',
+                                  range:
+                                      '1: ប្រើប្រាស់ Keypad, 2: ប្រើប្រាស់ Terminal Command, 3: ប្រើប្រាស់ RS485,',
+                                  isEditable: true,
+                                )),
                                 SizedBox(width: 5),
                                 SizedBox(width: 30, child: Text(''))
                               ],
@@ -432,7 +511,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                             // P0_08
                             Row(
                               children: [
-                                Expanded(child: widgetInput('50', true)),
+                                Expanded(
+                                    child: WidgetInput(
+                                  value: '${widget.paramInverter.p0_08}',
+                                  description: 'ការកំណត់ប្រេកង់ជាមុននៃម៉ូទ័រ',
+                                  range: '0Hz -> តម្លៃអតិបរមា (PE10)',
+                                  isEditable: true,
+                                )),
                                 SizedBox(width: 5),
                                 SizedBox(
                                     width: 30,
@@ -446,13 +531,19 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                             Row(
                               children: [
                                 Expanded(
-                                    child: widgetDropdown(
-                                        "0",
-                                        {
-                                          "0": "0: motor Forward",
-                                          "1": "1: motor Reverse",
-                                        },
-                                        true)),
+                                    child: WidgetDropdown(
+                                  value: widget.paramInverter.p0_09.value
+                                      .toString(),
+                                  options: {
+                                    "${P0_09.motorForward.value}":
+                                        "0: ${P0_09.motorForward.description}",
+                                    "${P0_09.motorReverse.value}":
+                                        "1: ${P0_09.motorForward.description}",
+                                  },
+                                  description: 'ជ្រើសរើសទិសដៅនៃម៉ូទ័រ',
+                                  range: '0: ម៉ូទ័រទៅមុខ, 1: ម៉ូទ័របញ្ច្រាស់',
+                                  isEditable: true,
+                                )),
                                 SizedBox(width: 5),
                                 SizedBox(width: 30, child: Text(''))
                               ],
@@ -460,7 +551,14 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                             // P0_10
                             Row(
                               children: [
-                                Expanded(child: widgetInput('50', false)),
+                                Expanded(
+                                    child: WidgetInput(
+                                  value: '${widget.paramInverter.p0_10}',
+                                  description: 'ប្រេកង់អតិរមា',
+                                  range: '50.0Hz -> 600.0Hz',
+                                  isEditable:
+                                      widget.isInverterOpen ? true : false,
+                                )),
                                 SizedBox(width: 5),
                                 SizedBox(
                                     width: 30,
@@ -520,7 +618,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // P1_01
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('500', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                    value: '${widget.paramInverter.p1_01}',
+                                    description: 'ការវាយតម្លៃថាមពលនៃម៉ូទ័រ',
+                                    range: '0.1KW -> 1000.0KW',
+                                    isEditable: true,
+                                  )),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -533,7 +637,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // P1_02
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('400', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                    value: '${widget.paramInverter.p1_02}',
+                                    description: 'ការវាយតម្លៃវ៉ុលនៃម៉ូទ័រ',
+                                    range: '1V -> 2000V',
+                                    isEditable: true,
+                                  )),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -546,7 +656,15 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // P1_03
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('11', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value:
+                                              '${widget.paramInverter.p1_03}',
+                                          description:
+                                              'ការវាយតម្លៃចរន្តនៃម៉ូទ័រ',
+                                          range:
+                                              'ថាមពល Inverter < 55KW: 0.01A -> 655.35A, ថាមពល Inverter > 55KW: 0.1A -> 6553.5A',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -559,7 +677,14 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // P1_04
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('50', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value:
+                                              '${widget.paramInverter.p1_04}',
+                                          description:
+                                              'ការវាយតម្លៃប្រេកង់នៃម៉ូទ័រ',
+                                          range: '0.01Hz -> Maximum frequency',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -574,7 +699,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(child: widgetInput('500', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                    value: '${widget.paramInverter.p1_05}',
+                                    description: 'ការវាយតម្លៃល្បឿននៃម៉ូទ័រ',
+                                    range: '1 rpm  65535 rpm',
+                                    isEditable: true,
+                                  )),
                                   SizedBox(width: 5),
                                   Container(
                                       alignment: Alignment.centerRight,
@@ -667,7 +798,22 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE00
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('0', true)),
+                                  Expanded(
+                                      child: WidgetDropdown(
+                                    value: '${widget.paramInverter.pe00.value}',
+                                    options: {
+                                      '${PE_00.ved.value}':
+                                          '0: ${PE_00.ved.description}',
+                                      '${PE_00.solarPump.value}':
+                                          '1: ${PE_00.solarPump.description}',
+                                    },
+                                    description:
+                                        'របៀបគ្រប់គ្រងម៉ាស៊ីនបូមទឹកដើរដោយថាមពលព្រះអាទិត្យ',
+                                    range:
+                                        '0: VFD, 1: ម៉ាស៊ីនបូមទឹកដើរដោយថាមពលព្រះអាទិត្យ ( Solar Pump)',
+                                    isEditable:
+                                        widget.isInverterOpen ? true : false,
+                                  )),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -680,7 +826,14 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE16
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('500', false)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                    value: '${widget.paramInverter.pe16}',
+                                    description:
+                                        'កម្រិតតង់ស្យុង​ទាបបំផុតដើម្បីបញ្ឈប់ដំណើរការរបស់អាំងវែទ័រ',
+                                    range: '0.0 -> 1000V',
+                                    isEditable: true,
+                                  )),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -693,7 +846,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE17
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('490', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe17}',
+                                          description:
+                                              'កម្រិតតង់ស្យុងដែលអនុញ្ញាតអោយអាំងវែទ័រដំណើរការ',
+                                          range: '0.0 -> 1000V',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -706,7 +865,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE18
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('60', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe18}',
+                                          description:
+                                              'រយះពេលចាំសម្រាប់អាំងវែរទ័រដំណើរការ',
+                                          range: '0 -> 30000sec',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -718,13 +883,16 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               ),
                               // PE19
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(child: widgetInput('50', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe19}',
+                                          description:
+                                              'ការកំណត់ប្រេកង់ឈប់នៅពេលល្បឿនទាប',
+                                          range: '0.00 -> 300.00Hz',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
-                                  Container(
-                                      alignment: Alignment.centerRight,
+                                  SizedBox(
                                       width: 30,
                                       child: Text(
                                         'Hz',
@@ -735,7 +903,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE20
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('0', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                    value: '${widget.paramInverter.pe20}',
+                                    description: 'ពេលវេលាកំណត់ការពារប្រេកង់ទាប',
+                                    range: '0 -> 30000s',
+                                    isEditable: true,
+                                  )),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -748,7 +922,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE21
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('0', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe21}',
+                                          description:
+                                              'ពេលវេលាពន្យារការកំណត់ឡើងវិញដោយស្វ័យប្រវត្តិនៃការពារល្បឿនទាប',
+                                          range: '0 -> 30000s',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -761,7 +941,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE22
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('10', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe22}',
+                                          description:
+                                              'ចរន្តកំណត់ការពារដំណើរការស្ងួត',
+                                          range: '0 -> 999.9A',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -774,7 +960,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE23
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('20', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe23}',
+                                          description:
+                                              'ពេលវេលាកំណត់ការពារដំណើរការស្ងួត',
+                                          range: '0 -> 30000s',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -786,13 +978,16 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               ),
                               // PE24
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(child: widgetInput('60', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe24}',
+                                          description:
+                                              'ពេលវេលាពន្យារការកំណត់ឡើងវិញដោយស្វ័យប្រវត្តិនៃការពារដំណើរការស្ងួត',
+                                          range: '0 -> 30000s',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
-                                  Container(
-                                      alignment: Alignment.centerRight,
+                                  SizedBox(
                                       width: 30,
                                       child: Text(
                                         's',
@@ -803,7 +998,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE25
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('11', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe25}',
+                                          description:
+                                              'ចរន្តកំណត់ការពារចរន្តលើស',
+                                          range: '0 -> 999.9A',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -816,7 +1017,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE26
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('50', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe26}',
+                                          description:
+                                              'ពេលវេលាកំណត់ការពារចរន្តលើស',
+                                          range: '0 -> 30000s',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -829,7 +1036,13 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                               // PE27
                               Row(
                                 children: [
-                                  Expanded(child: widgetInput('60', true)),
+                                  Expanded(
+                                      child: WidgetInput(
+                                          value: '${widget.paramInverter.pe27}',
+                                          description:
+                                              'ពេលវេលាពន្យារការកំណត់ឡើងវិញដោយស្វ័យប្រវត្តិនៃការពារចរន្តលើស',
+                                          range: '0 -> 30000s',
+                                          isEditable: true)),
                                   SizedBox(width: 5),
                                   SizedBox(
                                       width: 30,
@@ -850,112 +1063,4 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
       ),
     );
   }
-}
-
-Widget widgetInput(String value, bool isEditable) {
-  return SizedBox(
-    height: 22,
-    child: TextField(
-      controller: TextEditingController(
-        text: value,
-      ),
-      keyboardType: TextInputType.number,
-      textDirection: TextDirection.rtl,
-      textAlignVertical: TextAlignVertical.center,
-      style: TextStyle(
-          fontSize: 15,
-          color: isEditable ? AppColor.primary : AppColor.unfocus),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        isDense: true,
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(3),
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(3),
-          borderSide: BorderSide(color: AppColor.bluskyLight, width: 1),
-        ),
-        focusColor: AppColor.bluskyLight,
-        prefixIcon: IconButton(
-          padding: EdgeInsets.zero,
-          iconSize: 14,
-          icon: Icon(Icons.info_outline, size: 14),
-          onPressed: () {},
-        ),
-      ),
-    ),
-  );
-}
-
-Widget widgetDropdown(
-  String value, // the selected short key
-  Map<String, String> options, // map of shortKey -> full description
-  bool isEditable,
-) {
-  return SizedBox(
-    height: 22,
-    child: DropdownButtonFormField<String>(
-      value: value,
-      // iconDisabledColor: isEditable ? AppColor.primary : AppColor.unfocus,
-      iconEnabledColor: isEditable ? AppColor.primary : AppColor.unfocus,
-      isExpanded: true,
-      style: const TextStyle(fontSize: 15, color: Colors.black),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        isDense: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(3),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(3),
-          borderSide: BorderSide(color: AppColor.bluskyLight, width: 1),
-        ),
-        prefixIcon: IconButton(
-          padding: EdgeInsets.zero,
-          iconSize: 14,
-          icon: const Icon(Icons.info_outline, size: 14),
-          onPressed: () {},
-        ),
-      ),
-
-      // show shortKey in the box
-      selectedItemBuilder: (context) {
-        return options.keys.map((shortKey) {
-          return Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              shortKey,
-              textDirection: TextDirection.rtl,
-              style: TextStyle(
-                  fontSize: 15,
-                  color: isEditable ? AppColor.primary : AppColor.unfocus),
-            ),
-          );
-        }).toList();
-      },
-
-      // show full description in the dropdown menu
-      items: options.entries.map((entry) {
-        return DropdownMenuItem<String>(
-          value: entry.key,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Text(entry.value, textDirection: TextDirection.rtl),
-          ),
-        );
-      }).toList(),
-
-      onChanged: isEditable
-          ? (String? newValue) {
-              print("Selected: $newValue");
-            }
-          : null,
-    ),
-  );
 }

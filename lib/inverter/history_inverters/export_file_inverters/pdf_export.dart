@@ -4,10 +4,22 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> exportPdf() async {
+Future<Uint8List> exportPdf(
+    {String nameInverter = '',
+    String nameStation = '',
+    double pv_v = 0,
+    double pv_a = 0,
+    double pv = 0,
+    double grid = 0,
+    double grid_a = 0,
+    double output_v = 0,
+    double output_a = 0,
+    double output = 0,
+    double output_hz = 0}) async {
   final pdf = pw.Document();
   final khmerFont = pw.Font.ttf(
       await rootBundle.load('assets/fonts/KantumruyPro_Regular.ttf'));
+  // pv_v = 1022.0;
 
   pdf.addPage(pw.Page(build: (context) {
     return pw
@@ -127,20 +139,22 @@ Future<Uint8List> exportPdf() async {
                 pw.TableRow(children: [
                   cellContent(text: '1'),
                   cellContent(text: '12-02-2024'),
+                  pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                      children: [
+                        cellContent(text: pv_v.toString()),
+                        cellContent(text: pv_a.toString()),
+                        cellContent(text: pv.toString()),
+                      ]),
                   pw.Row(children: [
-                    cellContent(text: '120230.3'),
-                    cellContent(text: '120230.3'),
-                    cellContent(text: '120230.3'),
+                    cellContent(text: grid_a.toString()),
+                    cellContent(text: grid.toString()),
                   ]),
                   pw.Row(children: [
-                    cellContent(text: '120230.3'),
-                    cellContent(text: '120230.3'),
-                  ]),
-                  pw.Row(children: [
-                    cellContent(text: '120230.3'),
-                    cellContent(text: '120230.3'),
-                    cellContent(text: '120230.3'),
-                    cellContent(text: '120230.3'),
+                    cellContent(text: output_v.toString()),
+                    cellContent(text: output_a.toString()),
+                    cellContent(text: output.toString()),
+                    cellContent(text: output_hz.toString()),
                   ]),
                 ]),
               ],

@@ -19,7 +19,7 @@ class ExcelPreview extends StatelessWidget {
     // Fake data
     final rows = List.generate(7, (i) {
       final time = "12-04-2023 07:${(20 + i * 5).toString().padLeft(2, '0')}";
-      final v = "123456.789";
+      final v = "123456.7";
       return {
         'no': '${i + 1}',
         'time': time,
@@ -61,7 +61,7 @@ class ExcelPreview extends StatelessWidget {
                                 color: Colors.green),
                           ),
                           Text(
-                            "Solar Green Energy Cambody",
+                            "Solar Green Energy Cambodia",
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -130,7 +130,8 @@ class ExcelPreview extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text("សង្ខេបសរុប",
+                      SizedBox(width: 110),
+                      const Text("តម្លៃសរុប",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       const SizedBox(width: 16),
                       Text("123456.7",
@@ -199,7 +200,7 @@ class ExcelPreview extends StatelessWidget {
                           children: [
                             SizedBox(
                               width: 100,
-                              child: Text("សង្ខេបសរុប ",
+                              child: Text("តម្លៃសរុប ",
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/widgets/inverter_modal_buttom_sheet.dart';
 
 class CardInverterScreen extends StatefulWidget {
-  const CardInverterScreen({super.key});
+  final ParamInverter paramInverter;
+  CardInverterScreen({super.key, required this.paramInverter});
 
   @override
   State<CardInverterScreen> createState() => _CardInverterScreenState();
@@ -173,7 +175,10 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10))),
                         builder: (BuildContext contect) {
-                          return InverterModalButtomSheet();
+                          return InverterModalButtomSheet(
+                            paramInverter: widget.paramInverter,
+                            isIverterOpen: false,
+                          );
                         });
                   },
                   icon: SvgPicture.asset(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:solar_management_system/routes/app_route.dart';
+import 'package:solar_management_system/style/app_colors.dart';
+import 'package:solar_management_system/test/test_slide_animation.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,10 +13,19 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: AppRoute.stationDetail,
-      onGenerateRoute: AppRoute.generateRoute,
+    return GlobalLoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidgetBuilder: (_) => const Center(
+        child: CircularProgressIndicator(
+          color: AppColor.primary,
+          strokeWidth: 4,
+        ),
+      ),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppRoute.stationDetail,
+        onGenerateRoute: AppRoute.generateRoute,
+      ),
     );
   }
 }
