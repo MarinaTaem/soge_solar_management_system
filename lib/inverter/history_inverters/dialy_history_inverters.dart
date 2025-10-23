@@ -1,197 +1,194 @@
-import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
-import 'package:solar_management_system/widgets/card_history_inverter.dart';
+import 'package:solar_management_system/utils/datetime_helper.dart';
+import 'package:solar_management_system/widgets/card_history_inverters.dart';
 import 'package:solar_management_system/widgets/card_summry_inverter.dart';
 
 class DialyHistoryInverters extends StatefulWidget {
-  const DialyHistoryInverters({super.key});
+  final ParamInverter paramInverter;
+  const DialyHistoryInverters({super.key, required this.paramInverter});
 
   @override
   State<DialyHistoryInverters> createState() => _DialyHistoryInvertersState();
 }
 
 class _DialyHistoryInvertersState extends State<DialyHistoryInverters> {
+  List<ParamInverter> inverters = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // inverters = [
+    //   widget.paramInverter,
+    //   widget.paramInverter,
+    // ];
+    inverters = [widget.paramInverter];
+    print('Inverter lenge = ${inverters.length}');
+  }
+
   @override
   Widget build(BuildContext context) {
-    String nameStation = 'វត្តលួង';
-    String day = '12';
-    String month = '03';
-    String year = '2024';
-    String time = "12:05";
-    String nameInverter = "Inverter 1";
-
-    double pv_power = 1499.3;
-    double grid_power = 679.1;
-    double out_power = 399.6;
-    double pv_v = 178.4;
-    double pv_a = 67.4;
-    double grid_a = 17.4;
-    double out_v = 337.4;
-    double out_a = 352.4;
-    double out_hz = 1234.3;
-
-    String sum_day = '12';
-    String sum_month = '03';
-    String sum_year = '2024';
-
-    double sum_pv_power = 1499.3;
-    double sum_grid_power = 679.1;
-    double sum_out_power = 399.6;
-    double sum_pv_v = 178.4;
-    double sum_pv_a = 67.4;
-    double sum_grid_a = 17.4;
-    double sum_out_v = 337.4;
-    double sum_out_a = 352.4;
-    double sum_out_hz = 1234.3;
+    DateTime dateTime = DateTime.now();
     return Center(
       child: Column(
         children: [
           SizedBox(height: 10),
-          // Summary all inverters
+          // Summary all inverters in daily
           CardSummryInverter(
-            nameStation: nameStation,
-            pv_power: sum_pv_power,
-            pv_v: sum_pv_v,
-            pv_a: sum_pv_a,
-            grid_power: sum_grid_power,
-            grid_a: sum_grid_a,
-            out_power: sum_out_power,
-            out_v: sum_out_v,
-            out_a: sum_out_a,
-            out_hz: sum_out_hz,
-            isShowNameStation: true,
-            isDialy: true,
-            day: sum_day,
-            month: sum_month,
-            year: sum_year,
+            paramInverter: widget.paramInverter,
+            dateTime: DatetimeHelper.formatToday(dateTime),
           ),
           SizedBox(height: 10),
+          // total each inverter in daily
+          if (inverters.length != 1)
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.all(3),
+                  itemCount: inverters.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final inverter = inverters[index];
+                    return _tapContainerInverter(
+                      nameInverter: inverter.nameInverter,
+                      pv: inverter.pvPower,
+                      grid: inverter.gridPower,
+                      output: inverter.outputPower,
+                    );
+                  }),
+            ),
+          SizedBox(height: 10),
+          // display inverter history in dialy (each record is 5 min)
           Expanded(
-            child: DefaultTabController(
-              length: 5,
-              child: Column(
-                children: <Widget>[
-                  ButtonsTabBar(
-                    height: 80,
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    backgroundColor: AppColor.primary,
-                    unselectedBackgroundColor: AppColor.primary,
-                    borderWidth: 2,
-                    borderColor: AppColor.bluskyLight,
-                    unselectedBorderColor: AppColor.unfocus,
-                    labelStyle: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                    // unselectedLabelStyle: const TextStyle(
-                    //     color: Colors.black87, fontWeight: FontWeight.bold),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                    tabs: <Widget>[
-                      Tab(child: _tapContainer()),
-                      Tab(child: _tapContainerInverter()),
-                      Tab(child: _tapContainerInverter()),
-                      Tab(child: _tapContainerInverter()),
-                      Tab(child: _tapContainerInverter()),
-                    ],
+              child: ListView.builder(
+            itemCount: inverters.length,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            itemBuilder: (BuildContext context, int index) {
+              final inverter = inverters[index];
+              return CardHistoryInverters(
+                nameInverter: 'Invert $index',
+                dateTimeStr: DatetimeHelper.formatToday(dateTime),
+                pv_power: inverter.pvPower,
+                grid_power: inverter.outputPower,
+                out_power: inverter.outputPower,
+                pv_v: inverter.pvVoltage,
+                pv_a: inverter.pvInputCurrent,
+                grid_a: inverter.outputPower,
+                out_v: inverter.outputVoltage,
+                out_a: inverter.outputCurrent,
+                out_hz: inverter.outputFrequency,
+              );
+            },
+          ))
+        ],
+      ),
+    );
+  }
+
+  Widget _tapContainerInverter(
+      {required String nameInverter,
+      required double pv,
+      required double grid,
+      required double output}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: AppColor.primary,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 37, 65, 83),
+            offset: Offset(1, 0),
+            spreadRadius: 1,
+          )
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            nameInverter,
+            style: TextStyle(
+                color: AppColor.textPrimary,
+                fontSize: 10,
+                fontWeight: FontWeight.normal),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                spacing: 3,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'PV :',
+                    style: TextStyle(color: AppColor.textPrimary, fontSize: 10),
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        Center(
-                          child: Column(
-                            spacing: 5,
-                            children: [
-                              CardHistoryInverter(
-                                day: day,
-                                month: month,
-                                year: year,
-                                time: time,
-                                nameInverter: nameInverter,
-                                pv_power: pv_power,
-                                grid_power: grid_power,
-                                out_power: out_power,
-                                pv_v: pv_v,
-                                pv_a: pv_a,
-                                grid_a: grid_a,
-                                out_v: out_v,
-                                out_a: out_a,
-                                out_hz: out_hz,
-                                isShowNameInverter: true,
-                                isDialy: true,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Center(child: Text('Inverter 1')),
-                        Center(child: Text('Inverter 2')),
-                        Center(child: Text('Inverter 3')),
-                        Center(child: Text('Inverter 3')),
-                      ],
-                    ),
+                  Text(
+                    'Grid :',
+                    style: TextStyle(color: AppColor.textPrimary, fontSize: 10),
+                  ),
+                  Text(
+                    'Out :',
+                    style: TextStyle(color: AppColor.textPrimary, fontSize: 10),
                   ),
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _tapContainer() {
-    return SizedBox(
-      height: 80,
-      width: 80,
-      child: Center(
-        child: Text(
-          'ទាំងអស់',
-          style: TextStyle(color: AppColor.textPrimary),
-        ),
-      ),
-    );
-  }
-
-  Widget _tapContainerInverter() {
-    return SizedBox(
-      height: 90,
-      width: 100,
-      child: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text('Inverter',
-              style: TextStyle(color: AppColor.textPrimary, fontSize: 10)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'PV:',
-                style: TextStyle(color: AppColor.textPrimary, fontSize: 10),
-              ),
-              Text('1212.2kW',
-                  style: TextStyle(color: AppColor.textPrimary, fontSize: 10)),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Grid:',
-                  style: TextStyle(color: AppColor.textPrimary, fontSize: 10)),
-              Text('121.2kW',
-                  style: TextStyle(color: AppColor.textPrimary, fontSize: 10)),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Out.:',
-                  style: TextStyle(color: AppColor.textPrimary, fontSize: 10)),
-              Text('121.2kW',
-                  style: TextStyle(color: AppColor.textPrimary, fontSize: 10)),
+              SizedBox(width: 5),
+              // value
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                spacing: 3,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '${pv.toStringAsFixed(1)}',
+                        style: TextStyle(
+                            color: AppColor.textPrimary, fontSize: 10),
+                      ),
+                      Text(
+                        ' kWh',
+                        style: TextStyle(color: AppColor.unfocus, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${grid.toStringAsFixed(1)}',
+                        style: TextStyle(
+                            color: AppColor.textPrimary, fontSize: 10),
+                      ),
+                      Text(
+                        ' kWh',
+                        style: TextStyle(color: AppColor.unfocus, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${output.toStringAsFixed(1)}',
+                        style: TextStyle(
+                            color: AppColor.textPrimary, fontSize: 10),
+                      ),
+                      Text(
+                        ' kWh',
+                        style: TextStyle(color: AppColor.unfocus, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                ],
+              )
             ],
           ),
         ],
-      )),
+      ),
     );
   }
 }

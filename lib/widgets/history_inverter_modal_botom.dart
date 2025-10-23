@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/excel_preview.dart';
 import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/export_file_dashboard.dart';
+import 'package:solar_management_system/inverter/history_inverters/export_file_inverters/pdf_export.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/utils/datetime_helper.dart';
 
@@ -37,6 +42,30 @@ class HistoryInverterModalBotom extends StatefulWidget {
 class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
   bool isTapPdfExport = false;
   bool isTapExcelExport = false;
+
+  Future<void> sharePdf() async {
+    // Show loading while generate pdf
+    showDialog(
+      context: context,
+      builder: (_) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    // Generate pdf bytes
+    final Uint8List pdfBytes = await exportPdf();
+    // Save to temp file
+    final dir = await getTemporaryDirectory();
+    final file = File('${dir.path}/report.pdf');
+    await file.writeAsBytes(pdfBytes);
+    // Close dialog
+    if (!mounted) return;
+    Navigator.pop(context);
+    // Share
+    await SharePlus.instance.share(ShareParams(
+      text: 'Report inverter',
+      files: [XFile(file.path)],
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,25 +113,28 @@ class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
                     setState(() {
                       isTapPdfExport = !isTapPdfExport;
                     });
+                    // Navigator.pop(context);
+                    sharePdf();
                     Navigator.pop(context);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => ExportFileDashboard(
-                                date: widget.date,
-                                // navigate: AppRoute.pdfInvertersHistory,
-                                pv_v: widget.pv_v,
-                                pv_a: widget.pv_a,
-                                pv: widget.pv,
-                                grid_a: widget.grid_a,
-                                grid: widget.grid,
-                                output_v: widget.output_v,
-                                output_a: widget.output_a,
-                                output: widget.output,
-                                output_hz: widget.output_hz,
-                              )
-                          // PdfPreviewScreen(),
-                          ),
-                    );
+
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //       builder: (context) => ExportFileDashboard(
+                    //             date: widget.date,
+                    //             // navigate: AppRoute.pdfInvertersHistory,
+                    //             pv_v: widget.pv_v,
+                    //             pv_a: widget.pv_a,
+                    //             pv: widget.pv,
+                    //             grid_a: widget.grid_a,
+                    //             grid: widget.grid,
+                    //             output_v: widget.output_v,
+                    //             output_a: widget.output_a,
+                    //             output: widget.output,
+                    //             output_hz: widget.output_hz,
+                    //           )
+                    //       // PdfPreviewScreen(),
+                    //       ),
+                    // );
                   },
                 ),
                 // Excel export

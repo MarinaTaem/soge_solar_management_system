@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
+import 'package:solar_management_system/utils/text_auto_size_helper.dart';
 import 'package:solar_management_system/widgets/inverter_modal_buttom_sheet.dart';
 
 class CardInverterScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
   bool isOnline = false;
   String nameInverter = 'Inverter 1';
   //
-  double pv_power = 120.0;
+  double pv_power = 12;
   double pv_v = 32.02;
   double pv_a = 21.23;
   double grid_power = 29.0;
@@ -52,30 +53,44 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  spacing: 8,
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color:
-                                isOnline ? AppColor.greenLight : AppColor.error,
-                            width: 2,
-                            strokeAlign: BorderSide.strokeAlignOutside),
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/image_5.jpg'),
-                            fit: BoxFit.cover),
+                Expanded(
+                  child: Row(
+                    spacing: 8,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: isOnline
+                                  ? AppColor.greenLight
+                                  : AppColor.error,
+                              width: 2,
+                              strokeAlign: BorderSide.strokeAlignOutside),
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/image_5.jpg'),
+                              fit: BoxFit.cover),
+                        ),
                       ),
-                    ),
-                    Text(
-                      nameInverter,
-                      style:
-                          TextStyle(color: AppColor.textPrimary, fontSize: 15),
-                    )
-                  ],
+                      Expanded(
+                          child: SizedBox(
+                        width: 90,
+                        child: TextAutoSizeHelper(
+                          text: 'text fdhfhd 3jjfd h helfo dfu12323 Hekko',
+                          maxFontSize: 40,
+                          minFontSize: 20,
+                          style: TextStyle(color: AppColor.textPrimary),
+                          maxLines: 1,
+                        ),
+                      )),
+                      // Text(
+                      //   'nameInverter',
+                      //   style:
+                      //       TextStyle(color: AppColor.textPrimary, fontSize: 15),
+                      // )
+                    ],
+                  ),
                 ),
                 // switch button - inverter
                 SizedBox(
@@ -226,9 +241,15 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    '$power $scale',
-                    style: TextStyle(color: AppColor.bluskyLight, fontSize: 20),
+                  Container(
+                    width: 30,
+                    child: TextAutoSizeHelper(
+                      text: '$power',
+                      maxFontSize: 20,
+                      minFontSize: 12,
+                      maxLines: 1,
+                      style: TextStyle(color: AppColor.bluskyLight),
+                    ),
                   ),
                   Text(
                     name!,
@@ -268,13 +289,6 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
                                   color: AppColor.textSecondary, fontSize: 12),
                             ),
                             SizedBox(width: 10),
-                            // if (!isPv)
-                            //   Text(
-                            //     '$p3 Hz',
-                            //     style: TextStyle(
-                            //         color: AppColor.textSecondary,
-                            //         fontSize: 12),
-                            //   ),
                           ],
                         ),
                       Text(
@@ -317,88 +331,4 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
       ],
     );
   }
-
-  // Widget _showModalButtomSheet() {
-  //   return Column(
-  //     children: [
-  //       Container(
-  //         height: 50,
-  //         decoration: BoxDecoration(
-  //             color: AppColor.textPrimary,
-  //             borderRadius: BorderRadius.only(
-  //                 topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(8.0),
-  //           child: Row(
-  //             children: [
-  //               SvgPicture.asset(
-  //                 'assets/images/setting.svg',
-  //                 // color: AppColor.primary,
-  //                 // colorBlendMode: BlendMode.srcIn,
-  //                 colorFilter:
-  //                     ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
-  //                 width: 30,
-  //                 height: 30,
-  //               ),
-  //               SizedBox(width: 10),
-  //               Text(
-  //                 'ការកំណត់អាំងវែកទ័រ',
-  //                 style: TextStyle(color: AppColor.primary),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: const EdgeInsets.all(16),
-  //         child: Column(
-  //           spacing: 10,
-  //           children: [
-  //             _rowModalBottomSheet(
-  //                 'ប្រវត្តិអាំងវែកទ័រ', 'assets/images/history.svg'),
-  //             _rowModalBottomSheet(
-  //                 'កំណត់ប៉ារ៉ាមែត្រ', 'assets/images/history.svg'),
-  //             _rowModalBottomSheet(
-  //                 'ព័ត៌មានអាំងវែកទ័រ', 'assets/images/history.svg'),
-  //           ],
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
-
-  // Widget _rowModalBottomSheet(String feature, String icon) {
-  //   bool isOnTap = false;
-  //   return GestureDetector(
-  //       onTap: () {
-  //         setState(() {
-  //           !isOnTap;
-  //         });
-  //       },
-  //       child: Container(
-  //         height: 46,
-  //         decoration: BoxDecoration(
-  //           color: isOnTap ? AppColor.bluskyLight : AppColor.primary,
-  //           boxShadow: [
-  //             BoxShadow(
-  //                 color: const Color.fromARGB(255, 34, 60, 75),
-  //                 blurRadius: 2,
-  //                 offset: Offset(0, 2))
-  //           ],
-  //         ),
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(8.0),
-  //           child: Row(
-  //             children: [
-  //               SvgPicture.asset(icon),
-  //               SizedBox(width: 5),
-  //               Text(
-  //                 feature,
-  //                 style: TextStyle(fontSize: 15, color: AppColor.textPrimary),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ));
-  // }
 }

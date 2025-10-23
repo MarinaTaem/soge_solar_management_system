@@ -2,48 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/style/app_text_style.dart';
 
 class CardHistoryInverter extends StatefulWidget {
-  final bool isShowNameInverter;
-  final String day;
-  final String month;
-  final String year;
+  final ParamInverter inverter;
+  final String datetime;
   final String time;
-  final nameInverter;
-  final double pv_power;
-  final double pv_v;
-  final double pv_a;
-  final double grid_power;
-  final double grid_a;
-  final double out_power;
-  final double out_v;
-  final double out_a;
-  final double out_hz;
-  final bool isDialy;
-  final bool isMonthly;
-  final bool isYarly;
-  CardHistoryInverter({
+  const CardHistoryInverter({
     super.key,
-    this.nameInverter,
-    required this.pv_power,
-    required this.pv_v,
-    required this.pv_a,
-    required this.grid_power,
-    required this.grid_a,
-    required this.out_power,
-    required this.out_v,
-    required this.out_a,
-    required this.out_hz,
-    this.isShowNameInverter = false,
-    this.isDialy = false,
-    this.isMonthly = false,
-    this.isYarly = false,
-    this.time = '',
-    this.day = '',
-    this.month = '',
-    this.year = '',
+    required this.inverter,
+    required this.datetime,
+    this.time = "",
   });
 
   @override
@@ -110,70 +81,22 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.isDialy)
-                  Row(
-                    children: [
-                      Text(
-                        'កាលបរិច្ឆេទៈ ',
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        "${widget.day}-",
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        "${widget.month}-",
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        widget.year,
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        widget.time,
-                        style: AppTextStyle.tittleCard,
-                      ),
-                    ],
-                  ),
-                if (widget.isMonthly)
-                  Row(
-                    children: [
-                      Text(
-                        'កាលបរិច្ឆេទៈ ',
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        "${widget.day}-",
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        "${widget.month}-",
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        widget.year,
-                        style: AppTextStyle.tittleCard,
-                      ),
-                    ],
-                  ),
-                if (widget.isYarly)
-                  Row(
-                    children: [
-                      Text(
-                        'កាលបរិច្ឆេទៈ ',
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        "${widget.month}-",
-                        style: AppTextStyle.tittleCard,
-                      ),
-                      Text(
-                        widget.year,
-                        style: AppTextStyle.tittleCard,
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'កាលបរិច្ឆេទៈ ',
+                      style: AppTextStyle.tittleCard,
+                    ),
+                    Text(
+                      widget.datetime,
+                      style: AppTextStyle.tittleCard,
+                    ),
+                    Text(
+                      "  ${widget.time}",
+                      style: AppTextStyle.tittleCard,
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: 17,
                   width: 17,
@@ -189,11 +112,6 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
                 ),
               ],
             ),
-            if (widget.isShowNameInverter)
-              Text(
-                '${widget.nameInverter}',
-                style: AppTextStyle.tittleCard,
-              ),
             const SizedBox(height: 4),
             // Summary row
             Row(
@@ -201,21 +119,28 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
                 Expanded(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${widget.pv_power}',
-                            style: AppTextStyle.tittleCard,
+                      SizedBox(
+                        height: 22,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${widget.inverter.pvPower}',
+                                style: AppTextStyle.tittleCard,
+                              ),
+                              Text(
+                                'kW',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.unfocus),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'kW',
-                            style: TextStyle(
-                                fontSize: 15, color: AppColor.unfocus),
-                          ),
-                        ],
+                        ),
                       ),
-                      const Text(
+                      Text(
                         'PV',
                         style: TextStyle(
                           color: AppColor.greenLight,
@@ -229,23 +154,30 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
                 Expanded(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${widget.grid_power}',
-                            style: AppTextStyle.tittleCard,
+                      SizedBox(
+                        height: 22,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${widget.inverter.gridPower}',
+                                style: AppTextStyle.tittleCard,
+                              ),
+                              Text(
+                                'kW',
+                                style: TextStyle(
+                                  color: AppColor.unfocus,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'kW',
-                            style: TextStyle(
-                              color: AppColor.unfocus,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      const Text(
+                      Text(
                         'Grid',
                         style: TextStyle(
                           fontSize: 15,
@@ -259,21 +191,28 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
                 Expanded(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${widget.out_power}',
-                            style: AppTextStyle.tittleCard,
+                      SizedBox(
+                        height: 22,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${widget.inverter.outputPower}',
+                                style: AppTextStyle.tittleCard,
+                              ),
+                              Text(
+                                'kW',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.unfocus),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'kW',
-                            style: TextStyle(
-                                fontSize: 15, color: AppColor.unfocus),
-                          ),
-                        ],
+                        ),
                       ),
-                      const Text(
+                      Text(
                         'Out',
                         style: TextStyle(
                           fontSize: 15,
@@ -305,23 +244,18 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'PV: ${widget.pv_v}V',
-                                style: AppTextStyle.body,
+                              Container(
+                                padding: EdgeInsets.only(right: 3),
+                                child: FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                    'PV: ${widget.inverter.pvVoltage}V',
+                                    style: AppTextStyle.body,
+                                  ),
+                                ),
                               ),
                               Text(
-                                'PV: ${widget.pv_a}A',
-                                style: AppTextStyle.body,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Grid: ${widget.grid_a}A',
+                                'PV: ${widget.inverter.pvInputCurrent}A',
                                 style: AppTextStyle.body,
                               ),
                             ],
@@ -331,16 +265,36 @@ class _CardHistoryInverterState extends State<CardHistoryInverter>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Out: ${widget.out_v}V',
-                                style: AppTextStyle.body,
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 1.5),
+                                child: Text(
+                                  'Grid: ${"widget.grid_a"}A',
+                                  style: AppTextStyle.body,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 3),
+                                child: Text(
+                                  'Out: ${widget.inverter.outputVoltage}V',
+                                  style: AppTextStyle.body,
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(),
+                                child: Text(
+                                  'Out: ${widget.inverter.outputCurrent}A',
+                                  style: AppTextStyle.body,
+                                ),
                               ),
                               Text(
-                                'Out: ${widget.out_a}A',
-                                style: AppTextStyle.body,
-                              ),
-                              Text(
-                                'Out: ${widget.out_hz}Hz',
+                                'Out: ${widget.inverter.outputFrequency}Hz',
                                 style: AppTextStyle.body,
                               ),
                             ],

@@ -227,7 +227,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.paramInverter.output_frequency
+                                      widget.paramInverter.outputFrequency
                                           .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
@@ -248,7 +248,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.paramInverter.preset_frequency
+                                      widget.paramInverter.presetFrequency
                                           .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
@@ -270,7 +270,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.paramInverter.pv_voltage
+                                      widget.paramInverter.pvVoltage
                                           .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
@@ -295,7 +295,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.paramInverter.output_voltage
+                                      widget.paramInverter.outputVoltage
                                           .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
@@ -319,7 +319,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.paramInverter.output_current
+                                      widget.paramInverter.outputCurrent
                                           .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
@@ -343,7 +343,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.paramInverter.output_power
+                                      widget.paramInverter.outputPower
                                           .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),
@@ -367,7 +367,7 @@ class _ConfigParamInverterScreenState extends State<ConfigParamInverterScreen>
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.paramInverter.pv_input_current
+                                      widget.paramInverter.pvInputCurrent
                                           .toStringAsFixed(1),
                                       style: AppTextStyle.inActiveTitle,
                                     ),

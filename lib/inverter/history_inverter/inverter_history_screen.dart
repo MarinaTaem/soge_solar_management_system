@@ -3,12 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/inverter/history_inverter/dialy_history_inverter.dart';
 import 'package:solar_management_system/inverter/history_inverter/monthly_history_inverter.dart';
 import 'package:solar_management_system/inverter/history_inverter/yearly_history_inverter.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/routes/app_route.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/widgets/custom_tap_bar.dart';
 
 class InverterHistoryScreen extends StatefulWidget {
-  const InverterHistoryScreen({super.key});
+  ParamInverter paramInverter;
+  InverterHistoryScreen({super.key, required this.paramInverter});
 
   @override
   State<InverterHistoryScreen> createState() => _InverterHistoryScreenState();
@@ -71,11 +73,14 @@ class _InverterHistoryScreenState extends State<InverterHistoryScreen> {
                   ),
                 ),
               ),
-              body: TabBarView(controller: tabController, children: [
-                DialyHistoryInverter(),
-                MonthlyHistoryInverter(),
-                YearlyHistoryInverter(),
-              ]));
+              body: TabBarView(
+                controller: tabController,
+                children: [
+                  DialyHistoryInverter(paramInverter: widget.paramInverter),
+                  MonthlyHistoryInverter(paramInverter: widget.paramInverter),
+                  YearlyHistoryInverter(paramInverter: widget.paramInverter),
+                ],
+              ));
         },
       ),
     );

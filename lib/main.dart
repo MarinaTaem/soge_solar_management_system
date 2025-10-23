@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:solar_management_system/routes/app_route.dart';
 import 'package:solar_management_system/style/app_colors.dart';
-import 'package:solar_management_system/test/test_slide_animation.dart';
 
 void main() {
   runApp(const MainApp());
@@ -27,5 +26,9 @@ class MainApp extends StatelessWidget {
         onGenerateRoute: AppRoute.generateRoute,
       ),
     );
+
+    // return MaterialApp(
+    //   home: TestMain(),
+    // );
   }
 }

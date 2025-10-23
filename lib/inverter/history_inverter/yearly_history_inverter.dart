@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
+import 'package:solar_management_system/utils/datetime_helper.dart';
 import 'package:solar_management_system/widgets/card_history_inverter.dart';
 import 'package:solar_management_system/widgets/card_summry_inverter.dart';
 
 class YearlyHistoryInverter extends StatefulWidget {
-  const YearlyHistoryInverter({super.key});
+  final ParamInverter paramInverter;
+  const YearlyHistoryInverter({super.key, required this.paramInverter});
 
   @override
   State<YearlyHistoryInverter> createState() => _YearlyHistoryInverterState();
@@ -12,51 +15,15 @@ class YearlyHistoryInverter extends StatefulWidget {
 class _YearlyHistoryInverterState extends State<YearlyHistoryInverter> {
   @override
   Widget build(BuildContext context) {
-    String nameInverter = 'វត្តលួង';
-    String month = '01';
-    String year = '2024';
-    String time = "12:05";
-
-    double pv_power = 1499.3;
-    double grid_power = 679.1;
-    double out_power = 399.6;
-    double pv_v = 178.4;
-    double pv_a = 67.4;
-    double grid_a = 17.4;
-    double out_v = 337.4;
-    double out_a = 352.4;
-    double out_hz = 1234.3;
-
-    String sum_year = '2024';
-
-    double sum_pv_power = 1499.3;
-    double sum_grid_power = 679.1;
-    double sum_out_power = 399.6;
-    double sum_pv_v = 178.4;
-    double sum_pv_a = 67.4;
-    double sum_grid_a = 17.4;
-    double sum_out_v = 337.4;
-    double sum_out_a = 352.4;
-    double sum_out_hz = 1234.3;
+    DateTime dateTime = DateTime.now();
     return Center(
       child: Column(
         children: [
           SizedBox(height: 10),
           // Summary all inverters
           CardSummryInverter(
-            nameStation: nameInverter,
-            pv_power: sum_pv_power,
-            pv_v: sum_pv_v,
-            pv_a: sum_pv_a,
-            grid_power: sum_grid_power,
-            grid_a: sum_grid_a,
-            out_power: sum_out_power,
-            out_v: sum_out_v,
-            out_a: sum_out_a,
-            out_hz: sum_out_hz,
-            isShowNameStation: true,
-            isYearly: true,
-            year: sum_year,
+            paramInverter: widget.paramInverter,
+            dateTime: DatetimeHelper.formatYear(dateTime),
           ),
           SizedBox(height: 10),
 
@@ -66,19 +33,8 @@ class _YearlyHistoryInverterState extends State<YearlyHistoryInverter> {
             child: Column(
               children: [
                 CardHistoryInverter(
-                  month: month,
-                  year: year,
-                  time: time,
-                  pv_power: pv_power,
-                  grid_power: grid_power,
-                  out_power: out_power,
-                  pv_v: pv_v,
-                  pv_a: pv_a,
-                  grid_a: grid_a,
-                  out_v: out_v,
-                  out_a: out_a,
-                  out_hz: out_hz,
-                  isYarly: true,
+                  inverter: widget.paramInverter,
+                  datetime: DatetimeHelper.formatYear(dateTime),
                 ),
               ],
             ),

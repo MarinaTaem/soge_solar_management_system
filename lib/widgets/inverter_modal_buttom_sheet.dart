@@ -5,7 +5,6 @@ import 'package:solar_management_system/inverter/history_inverter/inverter_histo
 import 'package:solar_management_system/inverter/info_inverter_screen.dart';
 import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
-import 'package:solar_management_system/widgets/toas_message_warning.dart';
 
 class InverterModalButtomSheet extends StatefulWidget {
   final ParamInverter paramInverter;
@@ -69,7 +68,9 @@ class _InverterModalButtomSheetState extends State<InverterModalButtomSheet> {
                   });
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (context) => const InverterHistoryScreen(),
+                      builder: (context) => InverterHistoryScreen(
+                        paramInverter: widget.paramInverter,
+                      ),
                     ),
                   );
                 },

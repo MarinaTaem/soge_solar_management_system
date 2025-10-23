@@ -1,46 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
+import 'package:solar_management_system/utils/text_auto_size_helper.dart';
 
 class CardSummryInverter extends StatefulWidget {
-  // char = 12 + 2
-  final double pv_power;
-  final double grid_power;
-  final double out_power;
-  // char = 7 + 2
-  final double pv_v;
-  final double pv_a;
-  final double grid_a;
-  final double out_v;
-  final double out_a;
-  final double out_hz;
-  final String nameStation;
-  final String day;
-  final String month;
-  final String year;
-  final bool isShowNameStation;
-  final bool isDialy;
-  final bool isMonthly;
-  final bool isYearly;
-  const CardSummryInverter({
+  final ParamInverter paramInverter;
+  String dateTime;
+  CardSummryInverter({
     super.key,
-    required this.pv_power,
-    required this.pv_v,
-    required this.pv_a,
-    required this.grid_power,
-    required this.grid_a,
-    required this.out_power,
-    required this.out_v,
-    required this.out_a,
-    required this.out_hz,
-    this.nameStation = '',
-    this.day = '',
-    this.month = '',
-    this.year = '',
-    this.isShowNameStation = true,
-    this.isDialy = false,
-    this.isMonthly = false,
-    this.isYearly = false,
+    required this.paramInverter,
+    required this.dateTime,
   });
 
   @override
@@ -52,6 +22,7 @@ class _CardSummryInverterState extends State<CardSummryInverter>
   bool isExtended = false;
   late Animation<double> _expendable;
   late AnimationController _controller;
+  // DateTime dateTime;
 
   @override
   void initState() {
@@ -101,193 +72,171 @@ class _CardSummryInverterState extends State<CardSummryInverter>
                 SizedBox(height: 10),
                 // Sammary pv, grid, out
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.max,
+                  spacing: 3,
                   children: [
                     // pv
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                    Expanded(
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 5,
                           children: [
-                            SvgPicture.asset(
-                              'assets/images/pv.svg',
-                              height: 25,
-                              width: 25,
-                              colorFilter: ColorFilter.mode(
-                                  AppColor.bluskyLight, BlendMode.srcIn),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/images/pv.svg',
+                                  height: 25,
+                                  width: 25,
+                                  colorFilter: ColorFilter.mode(
+                                      AppColor.bluskyLight, BlendMode.srcIn),
+                                ),
+                                SizedBox(width: 5),
+                                Text('PV',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: AppColor.greenDark,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ],
                             ),
-                            SizedBox(width: 5),
-                            Text('PV',
+                            // ',' = 10, 11
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 1),
+                              child: TextAutoSizeHelper(
+                                text: '1,000,000,000.0kWh',
                                 style: TextStyle(
-                                  color: AppColor.greenDark,
-                                  fontWeight: FontWeight.bold,
-                                )),
+                                    color: AppColor.primary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                maxFontSize: 20,
+                                minFontSize: 12,
+                              ),
+                            ),
                           ],
                         ),
-                        Text(
-                          '${widget.pv_power}kW',
-                          style: TextStyle(
-                              color: AppColor.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                        )
-                      ],
+                      ),
                     ),
                     // grid
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                    Expanded(
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 3,
                           children: [
-                            SvgPicture.asset(
-                              'assets/images/grid.svg',
-                              height: 25,
-                              width: 25,
-                              colorFilter: ColorFilter.mode(
-                                  AppColor.bluskyLight, BlendMode.srcIn),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/images/grid.svg',
+                                  height: 25,
+                                  width: 25,
+                                  colorFilter: ColorFilter.mode(
+                                      AppColor.bluskyLight, BlendMode.srcIn),
+                                ),
+                                SizedBox(width: 5),
+                                Text('Grid',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: AppColor.orangeLight,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ],
                             ),
-                            SizedBox(width: 5),
-                            Text('Grid',
+                            Container(
+                              padding: EdgeInsets.all(1),
+                              child: TextAutoSizeHelper(
+                                text: '1,000,000,000.0kWh',
                                 style: TextStyle(
-                                  color: AppColor.orangeLight,
-                                  fontWeight: FontWeight.bold,
-                                )),
+                                    color: AppColor.primary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                maxFontSize: 20,
+                                minFontSize: 12,
+                              ),
+                            )
                           ],
                         ),
-                        Text(
-                          '${widget.grid_power}kWh',
-                          style: TextStyle(
-                              color: AppColor.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                        )
-                      ],
+                      ),
                     ),
                     // Output
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                    Expanded(
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 3,
                           children: [
-                            SvgPicture.asset(
-                              'assets/images/energy.svg',
-                              height: 25,
-                              width: 25,
-                              colorFilter: ColorFilter.mode(
-                                  AppColor.bluskyLight, BlendMode.srcIn),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/images/energy.svg',
+                                  height: 25,
+                                  width: 25,
+                                  colorFilter: ColorFilter.mode(
+                                      AppColor.bluskyLight, BlendMode.srcIn),
+                                ),
+                                SizedBox(width: 5),
+                                Text('Out',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: AppColor.error,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ],
                             ),
-                            SizedBox(width: 5),
-                            Text('Out',
+                            Container(
+                              padding: EdgeInsets.all(1),
+                              child: TextAutoSizeHelper(
+                                text: '1,234,567,890.0kWh',
                                 style: TextStyle(
-                                  color: AppColor.error,
+                                  color: AppColor.primary,
                                   fontWeight: FontWeight.bold,
-                                )),
+                                ),
+                                textAlign: TextAlign.center,
+                                maxFontSize: 20,
+                                minFontSize: 12,
+                              ),
+                            )
                           ],
                         ),
-                        Text(
-                          '${widget.out_power}kW',
-                          style: TextStyle(
-                              color: AppColor.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                        )
-                      ],
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
                 // date & station
-                if (widget.isDialy)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'កាលបរិច្ឆេទ: ',
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                          Text(
-                            '${widget.day}-',
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                          Text(
-                            '${widget.month}-',
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                          Text(
-                            widget.year,
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                        ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'កាលបរិច្ឆេទ: ${widget.dateTime}',
+                      style: TextStyle(color: AppColor.primary, fontSize: 12),
+                    ),
+                    SizedBox(width: 15),
+                    Expanded(
+                      child: Container(
+                        height: 18,
+                        padding: EdgeInsets.all(2),
+                        alignment: Alignment.centerRight,
+                        child: TextAutoSizeHelper(
+                          text: 'ស្ថានីយ៍​${widget.paramInverter.nameStation}',
+                          style: TextStyle(color: AppColor.primary),
+                          maxFontSize: 12,
+                          minFontSize: 10,
+                          textAlign: TextAlign.right,
+                        ),
                       ),
-                      Text(
-                        'ស្ថានីយ៍​${widget.nameStation}',
-                        style: TextStyle(color: AppColor.primary, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                if (widget.isMonthly)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'កាលបរិច្ឆេទ: ',
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                          Text(
-                            '${widget.month}-',
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                          Text(
-                            widget.year,
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'ស្ថានីយ៍​${widget.nameStation}',
-                        style: TextStyle(color: AppColor.primary, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                if (widget.isYearly)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'កាលបរិច្ឆេទ: ',
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                          Text(
-                            widget.year,
-                            style: TextStyle(
-                                color: AppColor.primary, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'ស្ថានីយ៍​${widget.nameStation}',
-                        style: TextStyle(color: AppColor.primary, fontSize: 12),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
                 // Buttom
+                // ',': 12
                 SizeTransition(
                   sizeFactor: _expendable,
                   axis: Axis.vertical,
@@ -301,8 +250,9 @@ class _CardSummryInverterState extends State<CardSummryInverter>
                           Divider(thickness: 1),
                           // Paramets
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
+                              spacing: 5,
                               children: [
                                 // pv
                                 Expanded(
@@ -311,17 +261,29 @@ class _CardSummryInverterState extends State<CardSummryInverter>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'PV: ${widget.pv_v}V',
-                                        style: TextStyle(
-                                            color: AppColor.primary,
-                                            fontSize: 12),
+                                      Container(
+                                        padding: EdgeInsets.all(1),
+                                        child: TextAutoSizeHelper(
+                                          text:
+                                              'PV: ${widget.paramInverter.pvVoltage}V',
+                                          style: TextStyle(
+                                              color: AppColor.primary,
+                                              fontSize: 12),
+                                          maxFontSize: 12,
+                                          minFontSize: 10,
+                                        ),
                                       ),
-                                      Text(
-                                        'PV: ${widget.pv_a}A',
-                                        style: TextStyle(
-                                            color: AppColor.primary,
-                                            fontSize: 12),
+                                      Container(
+                                        padding: EdgeInsets.all(1),
+                                        child: TextAutoSizeHelper(
+                                          text:
+                                              'PV: ${widget.paramInverter.pvInputCurrent}A',
+                                          style: TextStyle(
+                                              color: AppColor.primary,
+                                              fontSize: 12),
+                                          maxFontSize: 12,
+                                          minFontSize: 10,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -333,11 +295,16 @@ class _CardSummryInverterState extends State<CardSummryInverter>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Grid: ${widget.grid_a}A',
-                                        style: TextStyle(
+                                      Container(
+                                        padding: EdgeInsets.all(1),
+                                        child: TextAutoSizeHelper(
+                                          text: 'Grid: 934,234,567,890C',
+                                          style: TextStyle(
                                             color: AppColor.primary,
-                                            fontSize: 12),
+                                          ),
+                                          maxFontSize: 12,
+                                          minFontSize: 10,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -349,23 +316,38 @@ class _CardSummryInverterState extends State<CardSummryInverter>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Out.: ${widget.out_v}V',
-                                        style: TextStyle(
-                                            color: AppColor.primary,
-                                            fontSize: 12),
+                                      Container(
+                                        padding: EdgeInsets.all(1),
+                                        child: TextAutoSizeHelper(
+                                          text:
+                                              'Out.: ${widget.paramInverter.outputVoltage}V',
+                                          style: TextStyle(
+                                              color: AppColor.primary),
+                                          maxFontSize: 12,
+                                          minFontSize: 10,
+                                        ),
                                       ),
-                                      Text(
-                                        'Grid: ${widget.out_a}A',
-                                        style: TextStyle(
-                                            color: AppColor.primary,
-                                            fontSize: 12),
+                                      Container(
+                                        padding: EdgeInsets.all(1),
+                                        child: TextAutoSizeHelper(
+                                          text:
+                                              'Out: ${widget.paramInverter.outputCurrent}A',
+                                          style: TextStyle(
+                                              color: AppColor.primary),
+                                          maxFontSize: 12,
+                                          minFontSize: 10,
+                                        ),
                                       ),
-                                      Text(
-                                        'Grid: ${widget.out_hz}Hz',
-                                        style: TextStyle(
-                                            color: AppColor.primary,
-                                            fontSize: 12),
+                                      Container(
+                                        padding: EdgeInsets.all(1),
+                                        child: TextAutoSizeHelper(
+                                          text:
+                                              'Out: ${widget.paramInverter.outputFrequency}Hz',
+                                          style: TextStyle(
+                                              color: AppColor.primary),
+                                          maxFontSize: 12,
+                                          minFontSize: 10,
+                                        ),
                                       ),
                                     ],
                                   ),

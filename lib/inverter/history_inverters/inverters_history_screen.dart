@@ -3,12 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/inverter/history_inverters/dialy_history_inverters.dart';
 import 'package:solar_management_system/inverter/history_inverters/monthly_history_inverters.dart';
 import 'package:solar_management_system/inverter/history_inverters/yearly_history_inverters.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/widgets/custom_tap_bar.dart';
 import 'package:solar_management_system/widgets/history_inverter_modal_botom.dart';
 
 class InvertersHistoryScreen extends StatefulWidget {
-  const InvertersHistoryScreen({super.key});
+  final ParamInverter paramInverter;
+  InvertersHistoryScreen({super.key, required this.paramInverter});
 
   @override
   State<InvertersHistoryScreen> createState() => _InvertersHistoryScreenState();
@@ -84,9 +86,9 @@ class _InvertersHistoryScreenState extends State<InvertersHistoryScreen> {
             ),
           ),
           body: TabBarView(children: [
-            DialyHistoryInverters(),
-            MonthlyHistoryInverters(),
-            YearlyHistoryInverters(),
+            DialyHistoryInverters(paramInverter: widget.paramInverter),
+            MonthlyHistoryInverters(paramInverter: widget.paramInverter),
+            YearlyHistoryInverters(paramInverter: widget.paramInverter),
           ])),
     );
   }

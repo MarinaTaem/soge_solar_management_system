@@ -35,10 +35,10 @@ class AppRoute {
     switch (setting.name) {
       case stationDetail:
         return MaterialPageRoute(builder: (_) => StationDetailScreen());
-      case invertersHistory:
-        return MaterialPageRoute(builder: (_) => InvertersHistoryScreen());
-      case inverterHistory:
-        return MaterialPageRoute(builder: (_) => InverterHistoryScreen());
+      // case invertersHistory:
+      //   return MaterialPageRoute(builder: (_) => InvertersHistoryScreen());
+      // case inverterHistory:
+      //   return MaterialPageRoute(builder: (_) => InverterHistoryScreen());
       case pdfInvertersHistory:
         return MaterialPageRoute(
             builder: (_) => PdfPreviewScreen(

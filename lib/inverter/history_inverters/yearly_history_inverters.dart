@@ -1,11 +1,14 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
+import 'package:solar_management_system/utils/datetime_helper.dart';
 import 'package:solar_management_system/widgets/card_history_inverter.dart';
 import 'package:solar_management_system/widgets/card_summry_inverter.dart';
 
 class YearlyHistoryInverters extends StatefulWidget {
-  const YearlyHistoryInverters({super.key});
+  ParamInverter paramInverter;
+  YearlyHistoryInverters({super.key, required this.paramInverter});
 
   @override
   State<YearlyHistoryInverters> createState() => _YearlyHistoryInvertersState();
@@ -39,24 +42,14 @@ class _YearlyHistoryInvertersState extends State<YearlyHistoryInverters> {
     double sum_out_v = 337.4;
     double sum_out_a = 352.4;
     double sum_out_hz = 1234.3;
+    DateTime dateTime = DateTime.now();
     return Center(
       child: Column(
         children: [
           SizedBox(height: 10),
           CardSummryInverter(
-            nameStation: nameStation,
-            pv_power: sum_pv_power,
-            pv_v: sum_pv_v,
-            pv_a: sum_pv_a,
-            grid_power: sum_grid_power,
-            grid_a: sum_grid_a,
-            out_power: sum_out_power,
-            out_v: sum_out_v,
-            out_a: sum_out_a,
-            out_hz: sum_out_hz,
-            isShowNameStation: true,
-            isYearly: true,
-            year: sum_year,
+            paramInverter: widget.paramInverter,
+            dateTime: DatetimeHelper.formatYear(dateTime),
           ),
           SizedBox(height: 10),
           Expanded(
@@ -94,20 +87,8 @@ class _YearlyHistoryInvertersState extends State<YearlyHistoryInverters> {
                             spacing: 5,
                             children: [
                               CardHistoryInverter(
-                                month: month,
-                                year: year,
-                                nameInverter: nameInverter,
-                                pv_power: pv_power,
-                                grid_power: grid_power,
-                                out_power: out_power,
-                                pv_v: pv_v,
-                                pv_a: pv_a,
-                                grid_a: grid_a,
-                                out_v: out_v,
-                                out_a: out_a,
-                                out_hz: out_hz,
-                                isShowNameInverter: true,
-                                isYarly: true,
+                                inverter: widget.paramInverter,
+                                datetime: DatetimeHelper.formatYear(dateTime),
                               ),
                             ],
                           ),
