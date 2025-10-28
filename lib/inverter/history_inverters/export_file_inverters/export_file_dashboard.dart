@@ -162,7 +162,7 @@ class _ExportFileDashboardState extends State<ExportFileDashboard> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'កាលបរិច្ឆេទ៖​ ${DatetimeHelper.formatToday(widget.date)}',
+                                      'កាលបរិច្ឆេទ៖​ ${DatetimeHelper.formatDay(widget.date)}',
                                       style: AppTextStyle.inActiveTitle,
                                     ),
                                     SizedBox(width: 5),

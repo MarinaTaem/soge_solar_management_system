@@ -95,188 +95,196 @@ class _CardHistoryInvertersState extends State<CardHistoryInverters>
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text('កាលបរិច្ឆេទៈ ', style: AppTextStyle.tittleCard),
-                    Text(widget.dateTimeStr!, style: AppTextStyle.tittleCard),
-                  ],
-                ),
-                SizedBox(
-                  height: 17,
-                  width: 17,
-                  child: isExtended
-                      ? SvgPicture.asset(
-                          'assets/images/arrow_down.svg',
-                          fit: BoxFit.contain,
-                        )
-                      : SvgPicture.asset(
-                          'assets/images/arrow_up.svg',
-                          fit: BoxFit.contain,
-                        ),
-                ),
-              ],
-            ),
-            if (widget.isShowNameInverter)
-              Text('${widget.nameInverter}', style: AppTextStyle.tittleCard),
-            const SizedBox(height: 4),
-            // Summary row
-            Row(
-              children: [
-                // PV
-                Expanded(
-                  child: Column(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 3,
+            children: [
+              // Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 2),
-                              child: TextAutoSizeHelper(
-                                text: '9,123,456,789${widget.pv_power}kWh',
-                                style: AppTextStyle.tittleCard,
-                                textAlign: TextAlign.center,
-                                maxFontSize: 15,
-                                minFontSize: 12,
-                              ),
-                            ),
-                          ),
-                          // Text(
-                          //   'kWh',
-                          //   style: TextStyle(
-                          //     fontSize: 15,
-                          //     color: AppColor.unfocus,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const Text(
-                        'PV',
-                        style: TextStyle(
-                          color: AppColor.greenLight,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('កាលបរិច្ឆេទៈ ', style: AppTextStyle.tittleCard),
+                      Text(widget.dateTimeStr!, style: AppTextStyle.tittleCard),
                     ],
                   ),
-                ),
-                SizedBox(width: 3),
-                // Grid
-                Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 2),
-                              child: TextAutoSizeHelper(
-                                text: '9,123,456,789${widget.grid_power}kWh',
-                                style: AppTextStyle.tittleCard,
-                                maxFontSize: 15,
-                                minFontSize: 12,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                  SizedBox(
+                    height: 17,
+                    width: 17,
+                    child: isExtended
+                        ? SvgPicture.asset(
+                            'assets/images/arrow_down.svg',
+                            fit: BoxFit.contain,
+                          )
+                        : SvgPicture.asset(
+                            'assets/images/arrow_up.svg',
+                            fit: BoxFit.contain,
                           ),
-                          // Text(
-                          //   'kWh',
-                          //   style: TextStyle(
-                          //     color: AppColor.unfocus,
-                          //     fontSize: 15,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const Text(
-                        'Grid',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: AppColor.orangeLight,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-                SizedBox(width: 3),
-                // Output
-                Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 2),
-                              child: TextAutoSizeHelper(
-                                text: '9,123,456,789${widget.out_power}kWh',
-                                style: AppTextStyle.tittleCard,
-                                maxFontSize: 15,
-                                minFontSize: 12,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          // Text(
-                          //   'kWh',
-                          //   style: TextStyle(
-                          //     fontSize: 15,
-                          //     color: AppColor.unfocus,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const Text(
-                        'Out',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: AppColor.error,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            // Sliding expandable section
-            SizeTransition(
-              sizeFactor: _expandAnimation,
-              axisAlignment: -1.0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Divider(thickness: 1),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 4,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _widgetCardEachInverter(
-                            nameInverter: 'Inverter $index',
-                            pv: widget.pv_power,
-                            grid: widget.grid_power,
-                            output: widget.out_power);
-                      },
-                    ),
-                  ],
-                ),
+                ],
               ),
-            ),
-          ],
+              if (widget.isShowNameInverter)
+                Text('${widget.nameInverter}', style: AppTextStyle.tittleCard),
+              const SizedBox(height: 4),
+              // Summary row
+              Row(
+                children: [
+                  // PV
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 2),
+                                child: TextAutoSizeHelper(
+                                  text: '${widget.pv_power}kWh',
+                                  style: AppTextStyle.tittleCard,
+                                  textAlign: TextAlign.center,
+                                  maxFontSize: 15,
+                                  minFontSize: 12,
+                                ),
+                              ),
+                            ),
+                            // Text(
+                            //   'kWh',
+                            //   style: TextStyle(
+                            //     fontSize: 15,
+                            //     color: AppColor.unfocus,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        SizedBox(height: 5),
+                        const Text(
+                          'PV',
+                          style: TextStyle(
+                            color: AppColor.greenLight,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  // Grid
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 2),
+                                child: TextAutoSizeHelper(
+                                  text: '${widget.grid_power}kWh',
+                                  style: AppTextStyle.tittleCard,
+                                  maxFontSize: 15,
+                                  minFontSize: 12,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            // Text(
+                            //   'kWh',
+                            //   style: TextStyle(
+                            //     color: AppColor.unfocus,
+                            //     fontSize: 15,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        SizedBox(height: 5),
+                        const Text(
+                          'Grid',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: AppColor.orangeLight,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  // Output
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 2),
+                                child: TextAutoSizeHelper(
+                                  text: '${widget.out_power}kWh',
+                                  style: AppTextStyle.tittleCard,
+                                  maxFontSize: 15,
+                                  minFontSize: 12,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            // Text(
+                            //   'kWh',
+                            //   style: TextStyle(
+                            //     fontSize: 15,
+                            //     color: AppColor.unfocus,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        SizedBox(height: 5),
+                        const Text(
+                          'Out',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: AppColor.error,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              // Sliding expandable section
+              // SizeTransition(
+              //   sizeFactor: _expandAnimation,
+              //   axisAlignment: -1.0,
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 16),
+              //     child: Column(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: [
+              //         const Divider(thickness: 1),
+              //         ListView.builder(
+              //           shrinkWrap: true,
+              //           physics: const NeverScrollableScrollPhysics(),
+              //           itemCount: 4,
+              //           itemBuilder: (BuildContext context, int index) {
+              //             return _widgetCardEachInverter(
+              //                 nameInverter: 'Inverter $index',
+              //                 pv: widget.pv_power,
+              //                 grid: widget.grid_power,
+              //                 output: widget.out_power);
+              //           },
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
         ),
       ),
     );

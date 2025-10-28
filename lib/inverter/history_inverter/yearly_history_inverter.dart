@@ -21,10 +21,10 @@ class _YearlyHistoryInverterState extends State<YearlyHistoryInverter> {
         children: [
           SizedBox(height: 10),
           // Summary all inverters
-          CardSummryInverter(
-            paramInverter: widget.paramInverter,
-            dateTime: DatetimeHelper.formatYear(dateTime),
-          ),
+          // CardSummryInverter(
+          //   paramInverter: widget.paramInverter,
+          //   dateTime: DatetimeHelper.formatYear(dateTime),
+          // ),
           SizedBox(height: 10),
 
           // List all card history

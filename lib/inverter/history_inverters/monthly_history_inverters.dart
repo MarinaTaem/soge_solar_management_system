@@ -1,6 +1,7 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_management_system/model/inverter_model.dart';
+import 'package:solar_management_system/model/station_inverter_total_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/utils/datetime_helper.dart';
 import 'package:solar_management_system/widgets/card_history_inverter.dart';
@@ -8,7 +9,12 @@ import 'package:solar_management_system/widgets/card_summry_inverter.dart';
 
 class MonthlyHistoryInverters extends StatefulWidget {
   ParamInverter paramInverter;
-  MonthlyHistoryInverters({super.key, required this.paramInverter});
+  final SmsaStationInverterMonthlyTotalModel? inverterMonthlyTotalModel;
+  MonthlyHistoryInverters({
+    super.key,
+    required this.paramInverter,
+    required this.inverterMonthlyTotalModel,
+  });
 
   @override
   State<MonthlyHistoryInverters> createState() =>
@@ -18,40 +24,28 @@ class MonthlyHistoryInverters extends StatefulWidget {
 class _MonthlyHistoryInvertersState extends State<MonthlyHistoryInverters> {
   @override
   Widget build(BuildContext context) {
-    String day = '12';
-    String month = '03';
-    String year = '2024';
-    String nameInverter = "Inverter 1";
-    double pv_power = 1499.3;
-    double grid_power = 679.1;
-    double out_power = 399.6;
-    double pv_v = 178.4;
-    double pv_a = 67.4;
-    double grid_a = 17.4;
-    double out_v = 337.4;
-    double out_a = 352.4;
-    double out_hz = 1234.3;
-
-    String name_station = 'វត្តលួង';
-    String sum_month = '03';
-    String sum_year = '2024';
-    double sum_pv_power = 1499.3;
-    double sum_grid_power = 679.1;
-    double sum_out_power = 399.6;
-    double sum_pv_v = 178.4;
-    double sum_pv_a = 67.4;
-    double sum_grid_a = 17.4;
-    double sum_out_v = 337.4;
-    double sum_out_a = 352.4;
-    double sum_out_hz = 1234.3;
     DateTime dateTime = DateTime.now();
     return Center(
       child: Column(
         children: [
           SizedBox(height: 10),
+          // CardSummryInverter(
+          //   paramInverter: widget.paramInverter,
+          //   dateTime: DatetimeHelper.formatMonth(dateTime),
+          // ),
           CardSummryInverter(
-            paramInverter: widget.paramInverter,
-            dateTime: DatetimeHelper.formatMonth(dateTime),
+            dateTime: DatetimeHelper.formatDay(
+                widget.inverterMonthlyTotalModel!.dateTime!),
+            nameStation: "Station 1",
+            totalPvPower: widget.inverterMonthlyTotalModel!.totalPvEnergy,
+            totalGridPower: widget.inverterMonthlyTotalModel!.totalGridEnergy,
+            totalOutputPower: widget.inverterMonthlyTotalModel!.totalOutEnergy,
+            pvVoltage: 0.0,
+            pvCurrent: 0.0,
+            gridVoltage: 0.0,
+            outputVoltage: 0.0,
+            outputCurrent: 0.0,
+            outputFrequency: 0.0,
           ),
           SizedBox(height: 10),
           Expanded(

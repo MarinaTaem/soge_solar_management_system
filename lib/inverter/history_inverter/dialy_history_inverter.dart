@@ -21,10 +21,10 @@ class _DialyHistoryInverterState extends State<DialyHistoryInverter> {
         children: [
           SizedBox(height: 10),
           // Summary all inverters
-          CardSummryInverter(
-            paramInverter: widget.paramInverter,
-            dateTime: DatetimeHelper.formatToday(date),
-          ),
+          // CardSummryInverter(
+          //   paramInverter: widget.paramInverter,
+          //   dateTime: DatetimeHelper.formatToday(date),
+          // ),
           SizedBox(height: 10),
           // List all card history
           SingleChildScrollView(
@@ -33,7 +33,7 @@ class _DialyHistoryInverterState extends State<DialyHistoryInverter> {
               children: [
                 CardHistoryInverter(
                   inverter: widget.paramInverter,
-                  datetime: DatetimeHelper.formatToday(date),
+                  datetime: DatetimeHelper.formatDay(date),
                   time: "${date.hour}:${date.minute}",
                 ),
               ],

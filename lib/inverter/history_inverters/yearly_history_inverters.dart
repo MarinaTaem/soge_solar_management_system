@@ -17,40 +17,15 @@ class YearlyHistoryInverters extends StatefulWidget {
 class _YearlyHistoryInvertersState extends State<YearlyHistoryInverters> {
   @override
   Widget build(BuildContext context) {
-    String month = '03';
-    String year = '2024';
-    String nameInverter = "Inverter 1";
-
-    double pv_power = 1499.3;
-    double grid_power = 679.1;
-    double out_power = 399.6;
-    double pv_v = 178.4;
-    double pv_a = 67.4;
-    double grid_a = 17.4;
-    double out_v = 337.4;
-    double out_a = 352.4;
-    double out_hz = 1234.3;
-
-    String nameStation = 'វត្ដលួង';
-    String sum_year = '2024';
-    double sum_pv_power = 1499.3;
-    double sum_grid_power = 679.1;
-    double sum_out_power = 399.6;
-    double sum_pv_v = 178.4;
-    double sum_pv_a = 67.4;
-    double sum_grid_a = 17.4;
-    double sum_out_v = 337.4;
-    double sum_out_a = 352.4;
-    double sum_out_hz = 1234.3;
     DateTime dateTime = DateTime.now();
     return Center(
       child: Column(
         children: [
           SizedBox(height: 10),
-          CardSummryInverter(
-            paramInverter: widget.paramInverter,
-            dateTime: DatetimeHelper.formatYear(dateTime),
-          ),
+          // CardSummryInverter(
+          //   paramInverter: widget.paramInverter,
+          //   dateTime: DatetimeHelper.formatYear(dateTime),
+          // ),
           SizedBox(height: 10),
           Expanded(
             child: DefaultTabController(

@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/inverter/config_param/config_param_inverter_screen.dart';
 import 'package:solar_management_system/inverter/history_inverter/inverter_history_screen.dart';
-import 'package:solar_management_system/inverter/info_inverter_screen.dart';
+import 'package:solar_management_system/inverter/information/inverter_info_screen.dart';
+import 'package:solar_management_system/model/inverter_info_model.dart';
 import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 
 class InverterModalButtomSheet extends StatefulWidget {
+  final InverterInfoModel inverterInfoModel;
   final ParamInverter paramInverter;
   final bool isIverterOpen;
   const InverterModalButtomSheet(
-      {super.key, required this.paramInverter, required this.isIverterOpen});
+      {super.key,
+      required this.paramInverter,
+      required this.isIverterOpen,
+      required this.inverterInfoModel});
 
   @override
   State<InverterModalButtomSheet> createState() =>
@@ -26,6 +31,7 @@ class _InverterModalButtomSheetState extends State<InverterModalButtomSheet> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Title buttom sheet
         Container(
           height: 50,
           decoration: BoxDecoration(
@@ -52,6 +58,7 @@ class _InverterModalButtomSheetState extends State<InverterModalButtomSheet> {
             ),
           ),
         ),
+        // Content buttom sheet
         Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -102,16 +109,17 @@ class _InverterModalButtomSheetState extends State<InverterModalButtomSheet> {
                   setState(() {
                     isTapInfoFeature = !isTapInfoFeature;
                   });
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const InfoInverterScreen(),
-                    ),
-                  );
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      _createRoute(InverterInfoScreen(
+                        inverterInfoModel: widget.inverterInfoModel,
+                      )));
                 },
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -150,6 +158,7 @@ class _InverterModalButtomSheetState extends State<InverterModalButtomSheet> {
   }
 }
 
+// to get animate while push route
 Route<void> _createRoute(Widget child) {
   return PageRouteBuilder(
     transitionDuration: Duration(milliseconds: 600),

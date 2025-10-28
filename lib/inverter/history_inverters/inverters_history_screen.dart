@@ -4,6 +4,7 @@ import 'package:solar_management_system/inverter/history_inverters/dialy_history
 import 'package:solar_management_system/inverter/history_inverters/monthly_history_inverters.dart';
 import 'package:solar_management_system/inverter/history_inverters/yearly_history_inverters.dart';
 import 'package:solar_management_system/model/inverter_model.dart';
+import 'package:solar_management_system/model/station_inverter_total_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/widgets/custom_tap_bar.dart';
 import 'package:solar_management_system/widgets/history_inverter_modal_botom.dart';
@@ -18,6 +19,83 @@ class InvertersHistoryScreen extends StatefulWidget {
 
 class _InvertersHistoryScreenState extends State<InvertersHistoryScreen> {
   DateTime date = DateTime.now();
+  String nameStation = 'Station';
+  SmsaStationInverterDailyTotalModel inverterDailyTotalModel =
+      SmsaStationInverterDailyTotalModel(
+          id: 1,
+          dateTime: DateTime.now(),
+          totalPvEnergy: 0.0,
+          totalGridEnergy: 0.0,
+          totalOutEnergy: 0.0,
+          smsaStationInverterDailyModelList: [
+        SmsaStationInverterDailyModel(
+          id: 1,
+          dateTime: DateTime(2024, 1, 15, 10, 30, 0),
+          deviceVoltage: 230.5,
+          pvVoltage: 450.2,
+          pvCurrent: 15.8,
+          pvPower: 7120.5,
+          pvEnergy: 12500.7,
+          gridVoltage: 220.0,
+          gridCurrent: 25.3,
+          gridPower: 5566.0,
+          gridEnergy: 8900.2,
+          outVoltage: 219.8,
+          outCurrent: 22.7,
+          outPower: 4980.3,
+          outEnergy: 7800.5,
+        ),
+        SmsaStationInverterDailyModel(
+          id: 2,
+          dateTime: DateTime(2024, 1, 15, 10, 30, 0),
+          deviceVoltage: 230.5,
+          pvVoltage: 450.2,
+          pvCurrent: 15.8,
+          pvPower: 700.5,
+          pvEnergy: 12500.7,
+          gridVoltage: 220.0,
+          gridCurrent: 25.3,
+          gridPower: 5566.0,
+          gridEnergy: 8900.2,
+          outVoltage: 219.8,
+          outCurrent: 22.7,
+          outPower: 4980.3,
+          outEnergy: 7800.5,
+        ),
+      ],
+          smsaStationInverterTotalModelList: [
+        SmsaStationInverterTotalModel(
+          id: 1,
+          totalPvEnergy: 10.0,
+          totalGridEnergy: 10.0,
+          totalOutEnergy: 10.0,
+        ),
+        SmsaStationInverterTotalModel(
+          id: 2,
+          totalPvEnergy: 100.0,
+          totalGridEnergy: 100.0,
+          totalOutEnergy: 100.0,
+        ),
+      ]);
+
+  // Monthly
+  SmsaStationInverterMonthlyTotalModel inverterMonthlyTotalModel =
+      SmsaStationInverterMonthlyTotalModel(
+          id: 1,
+          dateTime: DateTime.now(),
+          totalPvEnergy: 10.0,
+          totalGridEnergy: 10.0,
+          totalOutEnergy: 10.0,
+          smsaStationInverterMonthlyModelList: [
+        SmsaStationInverterMonthlyModel(
+          id: 2,
+          dateTime: DateTime(2024, 1, 15, 10, 30, 0),
+          pvEnergy: 12500.7,
+          gridEnergy: 8900.2,
+          outEnergy: 7800.5,
+        ),
+      ]);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -86,8 +164,15 @@ class _InvertersHistoryScreenState extends State<InvertersHistoryScreen> {
             ),
           ),
           body: TabBarView(children: [
-            DialyHistoryInverters(paramInverter: widget.paramInverter),
-            MonthlyHistoryInverters(paramInverter: widget.paramInverter),
+            DialyHistoryInverters(
+              inverterDailyTotalModel: inverterDailyTotalModel,
+              nameStation: nameStation,
+              // inverterDailyModel: inverterDailyModel,
+            ),
+            MonthlyHistoryInverters(
+              paramInverter: widget.paramInverter,
+              inverterMonthlyTotalModel: inverterMonthlyTotalModel,
+            ),
             YearlyHistoryInverters(paramInverter: widget.paramInverter),
           ])),
     );

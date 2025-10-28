@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:solar_management_system/style/app_colors.dart';
+import 'package:solar_management_system/utils/datetime_helper.dart';
 import 'package:solar_management_system/utils/text_auto_size_helper.dart';
 
-class CardSummryInverter extends StatefulWidget {
+class CardSummryInverterTest extends StatefulWidget {
   // final SmsaStationInverterDailyTotalModel inverterDailyTotalModel;
-  final String? dateTime;
+  final DateTime? dateTime;
   final String nameStation;
   final double? totalPvPower;
   final double? totalGridPower;
@@ -16,7 +17,7 @@ class CardSummryInverter extends StatefulWidget {
   final double outputVoltage;
   final double outputCurrent;
   final double outputFrequency;
-  const CardSummryInverter({
+  const CardSummryInverterTest({
     super.key,
     required this.dateTime,
     required this.nameStation,
@@ -32,10 +33,10 @@ class CardSummryInverter extends StatefulWidget {
   });
 
   @override
-  State<CardSummryInverter> createState() => _CardSummryInverterState();
+  State<CardSummryInverterTest> createState() => _CardSummryInverterTestState();
 }
 
-class _CardSummryInverterState extends State<CardSummryInverter>
+class _CardSummryInverterTestState extends State<CardSummryInverterTest>
     with TickerProviderStateMixin {
   bool isExtended = false;
   late Animation<double> _expendable;
@@ -235,7 +236,7 @@ class _CardSummryInverterState extends State<CardSummryInverter>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'កាលបរិច្ឆេទ: ${widget.dateTime!}',
+                      'កាលបរិច្ឆេទ: ${DatetimeHelper.formatDay(widget.dateTime!)}',
                       style: TextStyle(color: AppColor.primary, fontSize: 12),
                     ),
                     SizedBox(width: 15),

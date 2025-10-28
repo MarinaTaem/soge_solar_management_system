@@ -1,83 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:solar_management_system/model/inverter_model.dart';
+import 'package:solar_management_system/model/station_inverter_total_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/utils/datetime_helper.dart';
 import 'package:solar_management_system/widgets/card_history_inverters.dart';
 import 'package:solar_management_system/widgets/card_summry_inverter.dart';
 
 class DialyHistoryInverters extends StatefulWidget {
-  final ParamInverter paramInverter;
-  const DialyHistoryInverters({super.key, required this.paramInverter});
+  final SmsaStationInverterDailyTotalModel? inverterDailyTotalModel;
+  String nameStation;
+  DialyHistoryInverters({
+    super.key,
+    required this.inverterDailyTotalModel,
+    required this.nameStation,
+  });
 
   @override
   State<DialyHistoryInverters> createState() => _DialyHistoryInvertersState();
 }
 
 class _DialyHistoryInvertersState extends State<DialyHistoryInverters> {
-  List<ParamInverter> inverters = [];
+  List<SmsaStationInverterDailyModel> dailyRecords = [];
+  List<SmsaStationInverterTotalModel> inverterTotals = [];
 
   @override
   void initState() {
     super.initState();
-    // inverters = [
-    //   widget.paramInverter,
-    //   widget.paramInverter,
-    // ];
-    inverters = [widget.paramInverter];
-    print('Inverter lenge = ${inverters.length}');
+    fetchData();
+
+    dailyRecords =
+        widget.inverterDailyTotalModel?.smsaStationInverterDailyModelList ?? [];
+    print('Daily record: ${dailyRecords.length}');
+    inverterTotals =
+        widget.inverterDailyTotalModel?.smsaStationInverterTotalModelList ?? [];
   }
+
+  void fetchData() {}
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.now();
+    // DateTime dateTime = DateTime.now();
+
     return Center(
       child: Column(
         children: [
           SizedBox(height: 10),
           // Summary all inverters in daily
+          // CardSummryInverter(
+          //   paramInverter: widget.paramInverter,
+          //   dateTime: DatetimeHelper.formatToday(dateTime),
+          //   inverterDailyTotalModel: widget.inverterDailyTotalModel,
+          // ),
           CardSummryInverter(
-            paramInverter: widget.paramInverter,
-            dateTime: DatetimeHelper.formatToday(dateTime),
+            dateTime: DatetimeHelper.formatDay(
+                widget.inverterDailyTotalModel!.dateTime!),
+            nameStation: "Station 1",
+            totalPvPower: widget.inverterDailyTotalModel!.totalPvEnergy,
+            totalGridPower: widget.inverterDailyTotalModel!.totalGridEnergy,
+            totalOutputPower: widget.inverterDailyTotalModel!.totalOutEnergy,
+            pvVoltage: 0.0,
+            pvCurrent: 0.0,
+            gridVoltage: 0.0,
+            outputVoltage: 0.0,
+            outputCurrent: 0.0,
+            outputFrequency: 0.0,
           ),
           SizedBox(height: 10),
           // total each inverter in daily
-          if (inverters.length != 1)
+          if (inverterTotals.length != 1)
             SizedBox(
               height: 100,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.all(3),
-                  itemCount: inverters.length,
+                  itemCount: inverterTotals.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final inverter = inverters[index];
+                    final inverter = inverterTotals[index];
                     return _tapContainerInverter(
-                      nameInverter: inverter.nameInverter,
-                      pv: inverter.pvPower,
-                      grid: inverter.gridPower,
-                      output: inverter.outputPower,
+                      nameInverter: "Inverter $index",
+                      pv: inverter.totalPvEnergy!,
+                      grid: inverter.totalGridEnergy!,
+                      output: inverter.totalOutEnergy!,
                     );
                   }),
             ),
           SizedBox(height: 10),
-          // display inverter history in dialy (each record is 5 min)
+          // display inverter history in dialy (each record in 5 min)
           Expanded(
               child: ListView.builder(
-            itemCount: inverters.length,
+            itemCount: dailyRecords.length,
             padding: EdgeInsets.symmetric(horizontal: 16),
             itemBuilder: (BuildContext context, int index) {
-              final inverter = inverters[index];
+              final inverter = dailyRecords[index];
               return CardHistoryInverters(
                 nameInverter: 'Invert $index',
-                dateTimeStr: DatetimeHelper.formatToday(dateTime),
-                pv_power: inverter.pvPower,
-                grid_power: inverter.outputPower,
-                out_power: inverter.outputPower,
-                pv_v: inverter.pvVoltage,
-                pv_a: inverter.pvInputCurrent,
-                grid_a: inverter.outputPower,
-                out_v: inverter.outputVoltage,
-                out_a: inverter.outputCurrent,
-                out_hz: inverter.outputFrequency,
+                dateTimeStr: DatetimeHelper.formatDayTime(inverter.dateTime!),
+                pv_power: inverter.pvPower!,
+                grid_power: inverter.gridPower!,
+                out_power: inverter.outPower!,
+                pv_v: inverter.pvVoltage!,
+                pv_a: inverter.pvCurrent!,
+                grid_a: inverter.outPower!,
+                out_v: inverter.outVoltage!,
+                out_a: inverter.outCurrent!,
+                out_hz: inverter.outEnergy!,
               );
             },
           ))

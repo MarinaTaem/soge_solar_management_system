@@ -9,8 +9,8 @@ import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/widgets/custom_tap_bar.dart';
 
 class InverterHistoryScreen extends StatefulWidget {
-  ParamInverter paramInverter;
-  InverterHistoryScreen({super.key, required this.paramInverter});
+  final ParamInverter paramInverter;
+  const InverterHistoryScreen({super.key, required this.paramInverter});
 
   @override
   State<InverterHistoryScreen> createState() => _InverterHistoryScreenState();

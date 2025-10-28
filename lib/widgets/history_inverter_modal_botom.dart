@@ -92,7 +92,7 @@ class _HistoryInverterModalBotomState extends State<HistoryInverterModalBotom> {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    'កាលបរិច្ឆេទ ${DatetimeHelper.formatToday(widget.date)}',
+                    'កាលបរិច្ឆេទ ${DatetimeHelper.formatDay(widget.date)}',
                     style: TextStyle(color: AppColor.primary, fontSize: 16),
                   )
                 ],

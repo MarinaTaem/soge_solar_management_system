@@ -21,10 +21,10 @@ class _MonthlyHistoryInverterState extends State<MonthlyHistoryInverter> {
         children: [
           SizedBox(height: 10),
           // Summary all inverters
-          CardSummryInverter(
-            paramInverter: widget.paramInverter,
-            dateTime: DatetimeHelper.formatMonth(date),
-          ),
+          // CardSummryInverter(
+          //   paramInverter: widget.paramInverter,
+          //   dateTime: DatetimeHelper.formatMonth(date),
+          // ),
           SizedBox(height: 10),
           // List all card history
           SingleChildScrollView(
@@ -33,7 +33,7 @@ class _MonthlyHistoryInverterState extends State<MonthlyHistoryInverter> {
               children: [
                 CardHistoryInverter(
                   inverter: widget.paramInverter,
-                  datetime: DatetimeHelper.formatToday(date),
+                  datetime: DatetimeHelper.formatDay(date),
                 ),
               ],
             ),

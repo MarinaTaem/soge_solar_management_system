@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:solar_management_system/model/inverter_info_model.dart';
 import 'package:solar_management_system/model/inverter_model.dart';
 import 'package:solar_management_system/style/app_colors.dart';
 import 'package:solar_management_system/utils/text_auto_size_helper.dart';
@@ -31,6 +32,19 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
   double out_v = 12.03;
   double out_a = 2.93;
   double out_hz = 1.02;
+
+  //Test data inverter info
+  InverterInfoModel inverterInfo = InverterInfoModel(
+      nameInverter: '',
+      serialNumber: 'No124242',
+      model: 'Model 1',
+      maxCapacity: 1100,
+      rateEfficiency: 94.22,
+      currentEfficiency: 93.93,
+      totalOutput: 1213343.0,
+      dateInstall: DateTime(2024, 2, 23),
+      stationName: 'Station 1',
+      status: false);
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +207,7 @@ class _CardInverterScreenState extends State<CardInverterScreen> {
                           return InverterModalButtomSheet(
                             paramInverter: widget.paramInverter,
                             isIverterOpen: false,
+                            inverterInfoModel: inverterInfo,
                           );
                         });
                   },
